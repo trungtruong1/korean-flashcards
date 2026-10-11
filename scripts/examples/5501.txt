@@ -1,0 +1,250 @@
+저장 | 사진 [저장] 공간이 부족해요. | Không đủ dung lượng [lưu trữ] ảnh. | There's not enough photo [storage].
+수월하다 | 생각보다 일이 [수월했어요]. | Công việc [dễ dàng] hơn tôi nghĩ. | The work was [easier] than I thought.
+취급하다 | 이 가게는 중고품을 [취급해요]. | Cửa hàng này [kinh doanh] đồ cũ. | This store [deals in] secondhand goods.
+까닭 | 무슨 [까닭]으로 왔어요? | Bạn đến vì [lý do] gì? | For what [reason] did you come?
+하인 | [하인]이 문을 열었어요. | [Người hầu] đã mở cửa. | The [servant] opened the door.
+앉히다 | 아이를 의자에 [앉혔어요]. | Tôi [đặt] đứa bé ngồi lên ghế. | I [sat] the child on the chair.
+연락처 | [연락처]를 알려 주세요. | Cho tôi [thông tin liên lạc] của bạn. | Please give me your [contact info].
+책임감 | 그는 [책임감]이 강해요. | Anh ấy có [tinh thần trách nhiệm] cao. | He has a strong [sense of responsibility].
+네트워크 | [네트워크] 연결이 끊겼어요. | Kết nối [mạng] bị ngắt. | The [network] connection dropped.
+보장하다 | 품질을 [보장해요]. | Chúng tôi [đảm bảo] chất lượng. | We [guarantee] the quality.
+경치 | 산 위에서 보는 [경치]가 좋아요. | [Phong cảnh] nhìn từ trên núi rất đẹp. | The [view] from the mountain is great.
+금지되다 | 여기서는 흡연이 [금지돼] 있어요. | Hút thuốc [bị cấm] ở đây. | Smoking [is prohibited] here.
+용사 | [용사]가 괴물을 물리쳤어요. | [Dũng sĩ] đã đánh bại quái vật. | The [hero] defeated the monster.
+학자 | 그는 유명한 [학자]예요. | Ông ấy là một [học giả] nổi tiếng. | He's a famous [scholar].
+뱀파이어 | [뱀파이어]는 햇빛을 싫어해요. | [Ma cà rồng] ghét ánh nắng. | [Vampires] hate sunlight.
+세일 | 백화점에서 [세일]을 해요. | Trung tâm thương mại đang [giảm giá]. | The department store is having a [sale].
+과학적 | [과학적]으로 증명됐어요. | Đã được chứng minh [một cách khoa học]. | It's been [scientifically] proven.
+전주 | 노래 [전주]가 좋아요. | [Đoạn dạo đầu] bài hát hay. | The song's [intro] is good.
+의장 | 국회 [의장]이 발표했어요. | [Chủ tịch] Quốc hội đã phát biểu. | The [Speaker] of the National Assembly made an announcement.
+임하다 | 최선을 다해 경기에 [임했어요]. | Tôi đã [bước vào] trận đấu với tất cả nỗ lực. | I [approached] the match with all I had.
+누리꾼 | [누리꾼]들의 반응이 뜨거워요. | Phản ứng của [cư dân mạng] rất sôi nổi. | [Netizens] reacted enthusiastically.
+앞부분 | 책의 [앞부분]만 읽었어요. | Tôi chỉ đọc [phần đầu] cuốn sách. | I only read the [beginning] of the book.
+펴내다 | 그는 새 책을 [펴냈어요]. | Ông ấy đã [xuất bản] cuốn sách mới. | He [published] a new book.
+세자 | [세자]가 왕이 되었어요. | [Thế tử] đã lên làm vua. | The [crown prince] became king.
+관여하다 | 그 일에 [관여하지] 마세요. | Đừng [dính líu] đến việc đó. | Don't [get involved] in that.
+가르침 | 스승님의 [가르침]을 잊지 않아요. | Tôi không quên [lời dạy] của thầy. | I won't forget my teacher's [teachings].
+무지개 | 하늘에 [무지개]가 떴어요. | Trên trời xuất hiện [cầu vồng]. | A [rainbow] appeared in the sky.
+웃음소리 | 아이들의 [웃음소리]가 들려요. | Tôi nghe thấy [tiếng cười] của bọn trẻ. | I hear the children's [laughter].
+파이 | 사과 [파이]를 만들었어요. | Tôi đã làm [bánh nướng] táo. | I made an apple [pie].
+트이다 | 산에 오르니 가슴이 [트여요]. | Leo lên núi thấy lòng [thông thoáng]. | Climbing the mountain makes me feel [open and free].
+까마귀 | [까마귀]가 울어요. | [Con quạ] kêu. | A [crow] is cawing.
+아메리카노 | 따뜻한 [아메리카노] 한 잔 주세요. | Cho tôi một ly [Americano] nóng. | One hot [Americano], please.
+사령관 | [사령관]이 부대를 지휘해요. | [Tư lệnh] chỉ huy đơn vị. | The [commander] leads the unit.
+멜로디 | 이 노래는 [멜로디]가 예뻐요. | Bài hát này có [giai điệu] đẹp. | This song has a pretty [melody].
+책장 | [책장]에 책이 많아요. | Trên [giá sách] có nhiều sách. | There are many books on the [bookshelf].
+스승님 | [스승님], 감사합니다. | [Thầy], con cảm ơn thầy. | Thank you, [Master].
+손실 | 회사가 큰 [손실]을 봤어요. | Công ty đã chịu [tổn thất] lớn. | The company suffered a big [loss].
+수하 | 그는 [수하]들을 이끌었어요. | Hắn dẫn theo đám [thuộc hạ]. | He led his [subordinates].
+받침 | 이 글자에는 [받침]이 있어요. | Chữ này có [phụ âm cuối]. | This letter has a [final consonant].
+밤사이 | [밤사이] 눈이 많이 왔어요. | [Qua đêm] tuyết rơi rất nhiều. | It snowed a lot [overnight].
+둘러싸이다 | 마을이 산으로 [둘러싸여] 있어요. | Ngôi làng [được bao quanh] bởi núi. | The village [is surrounded] by mountains.
+색다르다 | [색다른] 경험을 했어요. | Tôi đã có một trải nghiệm [khác lạ]. | I had an [unusual] experience.
+점심시간 | [점심시간]에 뭐 먹을까요? | [Giờ ăn trưa] ăn gì đây? | What should we eat at [lunchtime]?
+뒤섞이다 | 여러 색이 [뒤섞였어요]. | Nhiều màu sắc [lẫn lộn] vào nhau. | Many colors [got mixed together].
+숲속 | [숲속]을 걸었어요. | Tôi đi bộ [trong rừng]. | I walked [through the forest].
+넋 | 그는 [넋]을 잃고 바라봤어요. | Anh ấy nhìn [thẫn thờ]. | He stared with his [mind] gone blank.
+부시다 | 햇빛에 눈이 [부셔요]. | Ánh nắng làm [chói] mắt. | The sunlight is [dazzling].
+전공 | [전공]이 뭐예요? | [Chuyên ngành] của bạn là gì? | What's your [major]?
+해상도 | 사진 [해상도]가 낮아요. | [Độ phân giải] ảnh thấp. | The photo [resolution] is low.
+수납 | 이 가구는 [수납] 공간이 많아요. | Đồ nội thất này có nhiều không gian [lưu trữ]. | This furniture has lots of [storage] space.
+예비 | [예비] 신부를 만났어요. | Tôi đã gặp [cô dâu tương lai]. | I met the [bride-to-be].
+승무원 | 언니는 비행기 [승무원]이에요. | Chị tôi là [tiếp viên] hàng không. | My sister is a flight [attendant].
+영토 | 이 섬은 우리 [영토]예요. | Hòn đảo này là [lãnh thổ] của chúng tôi. | This island is our [territory].
+어지간하다 | [어지간한] 일로는 화내지 않아요. | Chuyện [bình thường] thì tôi không giận. | I don't get angry over [ordinary] things.
+재우다 | 아기를 [재웠어요]. | Tôi đã [ru] em bé ngủ. | I [put the baby to sleep].
+왕실 | [왕실] 결혼식이 열렸어요. | Đám cưới [hoàng gia] đã diễn ra. | A [royal] wedding was held.
+요것 | [요것] 좀 봐. | Nhìn [cái này] này. | Look at [this].
+한복 | 설날에 [한복]을 입어요. | Vào Tết tôi mặc [hanbok]. | I wear [hanbok] on Lunar New Year.
+즉각 | [즉각] 대응했어요. | Họ đã ứng phó [ngay lập tức]. | They responded [immediately].
+물결 | 호수에 [물결]이 일어요. | [Sóng nước] gợn trên hồ. | [Ripples] spread across the lake.
+생기 | 봄이 되니 [생기]가 넘쳐요. | Mùa xuân đến tràn đầy [sức sống]. | Spring is full of [life].
+필요성 | 운동의 [필요성]을 느껴요. | Tôi cảm thấy [sự cần thiết] của việc tập thể dục. | I feel the [need] to exercise.
+해산물 | 저는 [해산물]을 좋아해요. | Tôi thích [hải sản]. | I like [seafood].
+수습하다 | 사태를 [수습했어요]. | Họ đã [giải quyết] tình hình. | They [handled] the situation.
+집착하다 | 과거에 [집착하지] 마세요. | Đừng [bám víu] vào quá khứ. | Don't [cling] to the past.
+뒤편 | 건물 [뒤편]에 주차장이 있어요. | [Phía sau] tòa nhà có bãi đỗ xe. | There's a parking lot at the [back] of the building.
+한복판 | 도시 [한복판]에 공원이 있어요. | Có công viên ở [ngay giữa] thành phố. | There's a park [right in the middle] of the city.
+은밀하다 | 그들은 [은밀하게] 만났어요. | Họ đã gặp nhau [bí mật]. | They met [secretly].
+횟수 | 운동 [횟수]를 늘렸어요. | Tôi đã tăng [số lần] tập thể dục. | I increased how [often] I work out.
+시인 | 그는 유명한 [시인]이에요. | Ông ấy là một [nhà thơ] nổi tiếng. | He's a famous [poet].
+어찌나 | [어찌나] 추운지 손이 얼었어요. | Lạnh [đến nỗi] tay tê cóng. | It was [so] cold my hands froze.
+전형적 | 그는 [전형적]인 한국 아빠예요. | Anh ấy là một ông bố Hàn [điển hình]. | He's a [typical] Korean dad.
+협박하다 | 그는 저를 [협박했어요]. | Hắn đã [đe dọa] tôi. | He [threatened] me.
+기념하다 | 결혼기념일을 [기념했어요]. | Chúng tôi đã [kỷ niệm] ngày cưới. | We [celebrated] our wedding anniversary.
+궁금증 | [궁금증]이 생겼어요. | Tôi nảy sinh [sự tò mò]. | My [curiosity] was piqued.
+쓱 | 그는 [쓱] 웃고 지나갔어요. | Anh ấy cười [khẽ] rồi đi qua. | He gave a [quick] smile and passed by.
+진영 | 두 [진영]이 대립하고 있어요. | Hai [phe] đang đối đầu nhau. | The two [camps] are in conflict.
+파악되다 | 원인이 [파악됐어요]. | Nguyên nhân đã [được xác định]. | The cause [has been identified].
+뻔 | 넘어질 [뻔]했어요. | Tôi [suýt] ngã. | I [almost] fell.
+늦어지다 | 회의가 [늦어졌어요]. | Cuộc họp bị [trễ]. | The meeting [ran late].
+황후 | [황후]는 아름다웠어요. | [Hoàng hậu] rất xinh đẹp. | The [empress] was beautiful.
+따갑다 | 햇볕이 [따가워요]. | Nắng [gay gắt]. | The sun is [scorching].
+경사 | 이 길은 [경사]가 심해요. | Con đường này [dốc] lắm. | This road has a steep [slope].
+밝기 | 화면 [밝기]를 줄였어요. | Tôi đã giảm [độ sáng] màn hình. | I lowered the screen [brightness].
+강호 | 그는 [강호]의 최고 고수예요. | Ông ấy là cao thủ số một [giang hồ]. | He's the greatest master of the [martial world].
+요기 | [요기] 앉아. | Ngồi [đây] nè. | Sit right [here].
+깊숙이 | 가방 [깊숙이] 넣었어요. | Tôi nhét [sâu] vào túi. | I put it [deep] in my bag.
+고용하다 | 회사가 직원을 [고용했어요]. | Công ty đã [tuyển dụng] nhân viên. | The company [hired] staff.
+요리사 | 제 꿈은 [요리사]예요. | Ước mơ của tôi là làm [đầu bếp]. | My dream is to be a [chef].
+교관 | [교관]이 훈련을 시켰어요. | [Huấn luyện viên] cho tập luyện. | The [instructor] led the training.
+도리 | 부모님께 효도하는 건 자식의 [도리]예요. | Hiếu thảo với bố mẹ là [bổn phận] của con cái. | Being devoted to your parents is a child's [duty].
+중부 | [중부] 지방에 비가 와요. | Vùng [miền trung] đang có mưa. | It's raining in the [central] region.
+느끼하다 | 이 음식은 너무 [느끼해요]. | Món này quá [ngấy]. | This food is too [greasy].
+변화하다 | 세상은 빠르게 [변화해요]. | Thế giới [thay đổi] nhanh chóng. | The world [changes] fast.
+일시적 | 이건 [일시적]인 현상이에요. | Đây là hiện tượng [tạm thời]. | This is a [temporary] phenomenon.
+지속력 | 이 립스틱은 [지속력]이 좋아요. | Son này có [độ bền màu] tốt. | This lipstick has good [staying power].
+잔해 | 사고 [잔해]가 남아 있어요. | [Mảnh vỡ] của vụ tai nạn vẫn còn. | The [wreckage] from the accident remains.
+쓰러뜨리다 | 그는 상대를 [쓰러뜨렸어요]. | Anh ấy đã [hạ gục] đối thủ. | He [knocked down] his opponent.
+발바닥 | [발바닥]이 아파요. | Tôi đau [lòng bàn chân]. | The [soles] of my feet hurt.
+확정 | 일정이 [확정]됐어요. | Lịch trình đã được [xác định]. | The schedule is [finalized].
+탐험 | 동굴 [탐험]을 했어요. | Chúng tôi đã [thám hiểm] hang động. | We went on a cave [expedition].
+커버하다 | 이 보험은 모든 사고를 [커버해요]. | Bảo hiểm này [chi trả] mọi tai nạn. | This insurance [covers] all accidents.
+사설 | 신문 [사설]을 읽었어요. | Tôi đã đọc [xã luận] trên báo. | I read the newspaper [editorial].
+이래 | 태어난 [이래] 처음이에요. | Đây là lần đầu tiên [kể từ] khi tôi sinh ra. | It's the first time [since] I was born.
+포지션 | 축구에서 무슨 [포지션]이에요? | Bạn chơi [vị trí] nào trong bóng đá? | What [position] do you play in soccer?
+탱크 | [탱크]가 지나가요. | [Xe tăng] đang đi qua. | A [tank] is passing by.
+모험가 | 그는 용감한 [모험가]예요. | Anh ấy là một [nhà thám hiểm] dũng cảm. | He's a brave [adventurer].
+비밀번호 | [비밀번호]를 잊어버렸어요. | Tôi quên [mật khẩu] rồi. | I forgot my [password].
+고춧가루 | 김치에 [고춧가루]를 넣어요. | Tôi cho [ớt bột] vào kim chi. | I put [red pepper powder] in kimchi.
+초등 | 동생은 [초등] 3학년이에요. | Em tôi học lớp 3 [tiểu học]. | My little brother is in the third grade of [elementary school].
+깨끗이 | 손을 [깨끗이] 씻으세요. | Hãy rửa tay [sạch sẽ]. | Wash your hands [thoroughly].
+예시 | [예시]를 들어 주세요. | Hãy cho tôi một [ví dụ]. | Please give me an [example].
+실천하다 | 계획을 [실천했어요]. | Tôi đã [thực hiện] kế hoạch. | I [carried out] my plan.
+밀려오다 | 파도가 [밀려와요]. | Sóng [ập vào]. | The waves [are rolling in].
+검토 | 서류 [검토]가 끝났어요. | Việc [xem xét] giấy tờ đã xong. | The document [review] is done.
+들이받다 | 차가 벽을 [들이받았어요]. | Xe [đâm sầm] vào tường. | The car [crashed into] the wall.
+착용 | 안전벨트 [착용]은 필수예요. | [Thắt] dây an toàn là bắt buộc. | [Wearing] a seatbelt is mandatory.
+서브 | 그는 [서브]를 잘해요. | Anh ấy [giao bóng] giỏi. | He has a great [serve].
+연구진 | [연구진]이 새로운 약을 개발했어요. | [Nhóm nghiên cứu] đã phát triển thuốc mới. | The [research team] developed a new drug.
+망설임 | [망설임] 없이 대답했어요. | Anh ấy trả lời không chút [do dự]. | He answered without [hesitation].
+돌진하다 | 소가 [돌진했어요]. | Con bò [lao tới]. | The bull [charged].
+바로바로 | 문제를 [바로바로] 해결해요. | Anh ấy giải quyết vấn đề [ngay tức thì]. | He solves problems [right away].
+옷장 | [옷장]에 옷이 많아요. | Trong [tủ quần áo] có nhiều đồ. | There are many clothes in the [wardrobe].
+잘다 | 양파를 [잘게] 썰어요. | Tôi thái hành tây [nhỏ]. | I chop the onions [finely].
+타워 | 남산 [타워]에 올라갔어요. | Tôi đã lên [tháp] Namsan. | I went up Namsan [Tower].
+보너스 | 연말에 [보너스]를 받았어요. | Cuối năm tôi nhận được [tiền thưởng]. | I got a [bonus] at the end of the year.
+흡수 | 이 크림은 [흡수]가 빨라요. | Kem này [thẩm thấu] nhanh. | This cream [absorbs] quickly.
+충성 | 그는 왕에게 [충성]했어요. | Ông ấy [trung thành] với nhà vua. | He was [loyal] to the king.
+정장 | 면접에 [정장]을 입고 가요. | Tôi mặc [vest] đi phỏng vấn. | I wear a [suit] to interviews.
+소화하다 | 음식을 잘 [소화해요]. | Tôi [tiêu hóa] thức ăn tốt. | I [digest] food well.
+평온하다 | 마음이 [평온해요]. | Lòng tôi [bình yên]. | My mind is [at peace].
+유쾌하다 | 그는 [유쾌한] 사람이에요. | Anh ấy là người [vui vẻ]. | He's a [cheerful] person.
+포도 | [포도]가 달아요. | [Nho] ngọt. | The [grapes] are sweet.
+일당 | 사기꾼 [일당]이 잡혔어요. | [Băng nhóm] lừa đảo đã bị bắt. | The [gang] of swindlers was caught.
+쪽지 | 책상 위에 [쪽지]가 있어요. | Trên bàn có [mảnh giấy nhắn]. | There's a [note] on the desk.
+손자 | 할머니가 [손자]를 안아요. | Bà ôm [cháu trai]. | Grandma hugs her [grandson].
+해설 | 경기 [해설]이 재미있어요. | [Bình luận] trận đấu rất thú vị. | The game [commentary] is fun.
+자칫 | [자칫] 실수하면 큰일 나요. | [Chỉ cần] sơ suất là có chuyện lớn. | One [slip] and it'll be a disaster.
+원한 | 그는 [원한]을 품었어요. | Hắn đã ôm [mối hận]. | He harbored a [grudge].
+와아 | [와아], 정말 예쁘다! | [Oa], đẹp quá! | [Wow], it's so pretty!
+화요일 | [화요일]에 시간 있어요? | [Thứ Ba] bạn có rảnh không? | Are you free on [Tuesday]?
+그사이 | [그사이] 키가 많이 컸네요. | [Trong thời gian đó] bạn cao lên nhiều quá. | You've grown a lot [in the meantime].
+지능 | 돌고래는 [지능]이 높아요. | Cá heo có [trí thông minh] cao. | Dolphins have high [intelligence].
+주일 | 두 [주일] 동안 여행했어요. | Tôi đã du lịch hai [tuần]. | I traveled for two [weeks].
+써먹다 | 배운 한국어를 [써먹었어요]. | Tôi đã [đem ra dùng] tiếng Hàn đã học. | I [used] the Korean I learned.
+인당 | [인당] 만 원이에요. | Mỗi [người] mười nghìn won. | It's ten thousand won [per person].
+독하다 | 이 술은 너무 [독해요]. | Rượu này [nặng] quá. | This liquor is too [strong].
+팔찌 | 친구에게 [팔찌]를 선물했어요. | Tôi tặng bạn một chiếc [vòng tay]. | I gave my friend a [bracelet].
+양배추 | [양배추] 샐러드를 만들었어요. | Tôi làm salad [bắp cải]. | I made a [cabbage] salad.
+적극 | 이 책을 [적극] 추천해요. | Tôi [nhiệt liệt] giới thiệu cuốn sách này. | I [highly] recommend this book.
+동사 | '먹다'는 [동사]예요. | '먹다' là [động từ]. | '먹다' is a [verb].
+관세 | 수입품에 [관세]를 매겨요. | Họ đánh [thuế quan] lên hàng nhập khẩu. | They impose [tariffs] on imports.
+차별 | [차별]은 나빠요. | [Phân biệt đối xử] là xấu. | [Discrimination] is wrong.
+슬퍼하다 | 그녀는 이별을 [슬퍼했어요]. | Cô ấy [đau buồn] vì chia tay. | She [grieved] over the breakup.
+격리 | 그는 2주 동안 [격리]됐어요. | Anh ấy bị [cách ly] hai tuần. | He was [quarantined] for two weeks.
+연필 | [연필]로 써 주세요. | Hãy viết bằng [bút chì]. | Please write with a [pencil].
+후드 | [후드] 티를 입었어요. | Tôi mặc áo [hoodie]. | I'm wearing a [hoodie].
+사기꾼 | 그는 [사기꾼]이에요. | Hắn là [kẻ lừa đảo]. | He's a [swindler].
+실루엣 | 창문에 사람 [실루엣]이 보여요. | Thấy [bóng dáng] người trên cửa sổ. | I can see a person's [silhouette] in the window.
+톡톡 | 어깨를 [톡톡] 두드렸어요. | Tôi vỗ [nhè nhẹ] vào vai. | I [tapped] him on the shoulder.
+늘어서다 | 사람들이 줄을 [늘어서] 있어요. | Mọi người [xếp hàng] dài. | People are [lined up].
+쭉쭉 | 아이 키가 [쭉쭉] 커요. | Đứa bé cao lên [vùn vụt]. | The child is [shooting up].
+삭제하다 | 사진을 [삭제했어요]. | Tôi đã [xóa] ảnh. | I [deleted] the photo.
+뿜어내다 | 공장이 연기를 [뿜어내요]. | Nhà máy [nhả] khói. | The factory [belches out] smoke.
+거듭 | [거듭] 감사드립니다. | Xin cảm ơn [một lần nữa]. | Thank you [again].
+표지 | 책 [표지]가 예뻐요. | [Bìa] sách đẹp. | The book [cover] is pretty.
+들이켜다 | 물을 단숨에 [들이켰어요]. | Tôi [tu] một hơi hết cốc nước. | I [gulped down] the water.
+상당 | 10만 원 [상당]의 선물을 받았어요. | Tôi nhận được món quà [trị giá] 100.000 won. | I got a gift [worth] 100,000 won.
+찬성하다 | 저는 그 의견에 [찬성해요]. | Tôi [tán thành] ý kiến đó. | I [agree with] that opinion.
+열받다 | 그 말 듣고 [열받았어]. | Nghe câu đó tớ [tức điên]. | I got [ticked off] when I heard that.
+감돌다 | 방 안에 긴장감이 [감돌아요]. | Không khí căng thẳng [bao trùm] căn phòng. | Tension [hangs] in the room.
+유연하다 | 그녀는 몸이 [유연해요]. | Cô ấy có cơ thể [dẻo dai]. | She's very [flexible].
+전작 | 그의 [전작]보다 재미있어요. | Hay hơn [tác phẩm trước] của anh ấy. | It's more fun than his [previous work].
+어이구 | [어이구], 힘들다. | [Ôi chao], mệt quá. | [Oof], this is hard.
+선정되다 | 그의 작품이 [선정됐어요]. | Tác phẩm của anh ấy đã [được chọn]. | His work [was selected].
+팔뚝 | [팔뚝]에 근육이 생겼어요. | [Cánh tay] tôi có cơ bắp rồi. | I've built muscle in my [arms].
+무작정 | [무작정] 여행을 떠났어요. | Tôi đã [không tính toán] mà lên đường du lịch. | I set off on a trip [without a plan].
+스틱 | 하키 [스틱]을 샀어요. | Tôi mua [gậy] khúc côn cầu. | I bought a hockey [stick].
+인질 | 범인이 [인질]을 잡았어요. | Hung thủ đã bắt [con tin]. | The criminal took a [hostage].
+보드 | 겨울에 [보드] 타러 가요. | Mùa đông tôi đi trượt [ván tuyết]. | I go [snowboarding] in winter.
+사로잡히다 | 그는 두려움에 [사로잡혔어요]. | Anh ấy [bị nỗi sợ chiếm lấy]. | He [was seized] by fear.
+순하다 | 이 강아지는 [순해요]. | Chú cún này rất [hiền]. | This puppy is [gentle].
+하나같이 | 모두 [하나같이] 웃었어요. | Tất cả [đều] cười. | Everyone laughed, [without exception].
+눈높이 | 아이 [눈높이]에 맞춰 설명해요. | Tôi giải thích phù hợp với [tầm hiểu biết] của trẻ. | I explain at the child's [level].
+웅크리다 | 고양이가 [웅크리고] 자요. | Con mèo [cuộn tròn] ngủ. | The cat sleeps [curled up].
+줌 | 쌀 한 [줌]을 넣으세요. | Cho một [nắm] gạo vào. | Add a [handful] of rice.
+추세 | 증가 [추세]예요. | Đang có [xu hướng] tăng. | It's on an upward [trend].
+충실하다 | 기본에 [충실하세요]. | Hãy [trung thành] với những điều cơ bản. | [Stick] to the basics.
+대군 | [대군]이 왕위를 노렸어요. | [Hoàng tử] nhòm ngó ngai vàng. | The [royal prince] eyed the throne.
+논리적 | 그는 [논리적]으로 말해요. | Anh ấy nói chuyện rất [logic]. | He speaks [logically].
+아트 | 거리 [아트]가 멋져요. | Nghệ thuật [đường phố] thật tuyệt. | The street [art] is cool.
+항목 | 이 [항목]을 확인하세요. | Hãy kiểm tra [mục] này. | Check this [item].
+진리 | 그건 [진리]예요. | Đó là [chân lý]. | That's the [truth].
+건배 | [건배]! | [Cạn ly]! | [Cheers]!
+보람 | 일한 [보람]이 있어요. | Công việc thật [đáng công]. | The work is [rewarding].
+형체 | 어둠 속에 [형체]가 보였어요. | Thấy một [hình dáng] trong bóng tối. | A [shape] appeared in the dark.
+대다수 | [대다수]가 찬성했어요. | [Đại đa số] đã tán thành. | The [vast majority] agreed.
+교육부 | [교육부]가 새 정책을 발표했어요. | [Bộ Giáo dục] đã công bố chính sách mới. | The [Ministry of Education] announced a new policy.
+뇌물 | 그는 [뇌물]을 받았어요. | Ông ta đã nhận [hối lộ]. | He took a [bribe].
+민간인 | [민간인] 피해가 컸어요. | Thiệt hại của [dân thường] rất lớn. | [Civilian] casualties were high.
+성녀 | [성녀]가 기도했어요. | [Thánh nữ] đã cầu nguyện. | The [saintess] prayed.
+옆집 | [옆집]에 누가 살아요? | Ai sống ở [nhà bên cạnh] vậy? | Who lives [next door]?
+답장 | [답장]을 보냈어요. | Tôi đã gửi [thư trả lời]. | I sent a [reply].
+걱정스럽다 | 그의 건강이 [걱정스러워요]. | Sức khỏe của anh ấy khiến tôi [lo lắng]. | I'm [worried] about his health.
+납득하다 | 그 설명은 [납득할] 수 없어요. | Tôi không thể [chấp nhận] lời giải thích đó. | I can't [accept] that explanation.
+기후 | [기후]가 변하고 있어요. | [Khí hậu] đang thay đổi. | The [climate] is changing.
+벽돌 | [벽돌]로 집을 지었어요. | Họ xây nhà bằng [gạch]. | They built the house with [bricks].
+캡처 | 화면을 [캡처]했어요. | Tôi đã [chụp màn hình]. | I took a [screenshot].
+폭포 | 큰 [폭포]를 봤어요. | Tôi đã thấy một [thác nước] lớn. | I saw a huge [waterfall].
+빨리다 | 모기에게 피를 [빨렸어요]. | Tôi bị muỗi [hút] máu. | A mosquito [sucked] my blood.
+기록되다 | 그의 이름이 역사에 [기록됐어요]. | Tên ông ấy [được ghi] vào lịch sử. | His name [was recorded] in history.
+생태계 | [생태계]를 보호해야 해요. | Phải bảo vệ [hệ sinh thái]. | We must protect the [ecosystem].
+험하다 | 산길이 [험해요]. | Đường núi [hiểm trở]. | The mountain path is [rough].
+주황색 | [주황색] 옷을 입었어요. | Tôi mặc áo [màu cam]. | I'm wearing [orange] clothes.
+가져다주다 | 물 좀 [가져다주세요]. | [Mang] cho tôi ít nước. | Please [bring] me some water.
+이왕 | [이왕] 왔으니까 먹고 가요. | [Đằng nào] cũng đến rồi, ăn rồi hãy đi. | [Since] you're here, eat before you go.
+울음소리 | 아기 [울음소리]가 들려요. | Tôi nghe thấy [tiếng khóc] của em bé. | I hear a baby [crying].
+굳히다 | 젤리를 냉장고에서 [굳혔어요]. | Tôi để thạch [đông lại] trong tủ lạnh. | I [set] the jelly in the fridge.
+멍청이 | 이 [멍청이]야! | Đồ [ngốc]! | You [idiot]!
+한없이 | 그녀는 [한없이] 착해요. | Cô ấy hiền [vô cùng]. | She's [endlessly] kind.
+격차 | 빈부 [격차]가 커요. | [Khoảng cách] giàu nghèo lớn. | The [gap] between rich and poor is wide.
+무너뜨리다 | 그는 상대 수비를 [무너뜨렸어요]. | Anh ấy đã [phá vỡ] hàng phòng ngự đối phương. | He [broke down] the opponent's defense.
+업적 | 그는 큰 [업적]을 남겼어요. | Ông ấy đã để lại [thành tựu] to lớn. | He left great [achievements].
+중국어 | [중국어]를 배우고 있어요. | Tôi đang học [tiếng Trung]. | I'm learning [Chinese].
+오른발 | [오른발]로 공을 찼어요. | Tôi đá bóng bằng [chân phải]. | I kicked the ball with my [right foot].
+은근 | 이 노래 [은근] 중독성 있어. | Bài hát này [ngầm] gây nghiện đấy. | This song is [kind of] addictive.
+밀어붙이다 | 그는 계획을 [밀어붙였어요]. | Anh ấy [đẩy mạnh] kế hoạch. | He [pushed ahead] with the plan.
+연봉 | [연봉]이 올랐어요. | [Lương năm] đã tăng. | My [annual salary] went up.
+찬성 | [찬성]하는 사람 손 드세요. | Ai [tán thành] thì giơ tay. | Raise your hand if you're in [favor].
+처분 | 낡은 가구를 [처분]했어요. | Tôi đã [thanh lý] đồ nội thất cũ. | I [got rid of] the old furniture.
+하여간 | [하여간] 고마워요. | [Dù sao thì] cũng cảm ơn. | [Anyhow], thanks.
+대목 | 명절 [대목]이라 바빠요. | Đang mùa [cao điểm] lễ tết nên bận. | We're busy because it's the holiday [rush].
+세팅하다 | 테이블을 [세팅했어요]. | Tôi đã [bày] bàn ăn. | I [set] the table.
+이토록 | [이토록] 아름다운 곳은 처음이에요. | Lần đầu tôi thấy nơi đẹp [đến thế này]. | I've never seen a place [this] beautiful.
+호남 | [호남] 지방은 음식이 맛있어요. | Vùng [Honam] có đồ ăn ngon. | Food in the [Honam] region is delicious.
+엥 | [엥]? 벌써 끝났어? | [Ơ]? Xong rồi à? | [Huh]? It's over already?
+금융 | 그는 [금융] 회사에서 일해요. | Anh ấy làm ở công ty [tài chính]. | He works at a [finance] company.
+즈음 | 해 질 [즈음]에 도착했어요. | Tôi đến [khoảng] lúc hoàng hôn. | I arrived [around] sunset.
+머 | [머]? 진짜? | [Gì]? Thật á? | [What]? Really?
+캐리어 | [캐리어]를 끌고 공항에 갔어요. | Tôi kéo [va li] ra sân bay. | I dragged my [suitcase] to the airport.
+보트 | 호수에서 [보트]를 탔어요. | Tôi đi [thuyền] trên hồ. | I rode a [boat] on the lake.
+탑승하다 | 비행기에 [탑승했어요]. | Tôi đã [lên] máy bay. | I [boarded] the plane.
+습격 | 적의 [습격]을 받았어요. | Chúng tôi bị địch [tập kích]. | We came under enemy [attack].
+시중 | [시중]에 파는 물건이에요. | Đây là hàng bán trên [thị trường]. | It's sold on the [market].
+상큼하다 | 레몬 향이 [상큼해요]. | Hương chanh [tươi mát]. | The lemon scent is [refreshing].
+그레이 | [그레이] 코트가 잘 어울려요. | Áo khoác [xám] rất hợp với bạn. | The [gray] coat suits you.
+묵묵히 | 그는 [묵묵히] 일했어요. | Anh ấy [lặng lẽ] làm việc. | He worked [silently].
+뻔뻔하다 | 그는 정말 [뻔뻔해요]. | Hắn thật [trơ trẽn]. | He's really [shameless].
+체 | 그는 아는 [체]했어요. | Anh ta [giả vờ] biết. | He [pretended] to know.
+실로 | [실로] 놀라운 일이에요. | [Thật sự] là chuyện đáng kinh ngạc. | It's [truly] amazing.

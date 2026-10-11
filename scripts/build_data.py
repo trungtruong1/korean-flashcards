@@ -227,6 +227,37 @@ def _choose_entries(cands, idx):
     return chosen
 
 
+def load_examples(folder):
+    out = {}
+    for path in sorted(glob.glob(os.path.join(folder, "*.txt"))):
+        with open(path, encoding="utf-8") as fh:
+            for n, line in enumerate(fh, 1):
+                line = line.rstrip("\n")
+                if not line.strip() or line.startswith("#"):
+                    continue
+                parts = line.split("|")
+                if len(parts) != 4:
+                    raise SystemExit(f"{os.path.basename(path)}:{n}: expected 'word | Korean | Vietnamese | English', got {len(parts)} fields")
+                word, ko, vi, en = (p.strip() for p in parts)
+                out[norm(word)] = [ko, vi, en]
+    return out
+
+
+def check_example(word, ex):
+    """Every line needs one [highlight]; the Korean one should start like the word."""
+    for label, text in zip(("ko", "vi", "en"), ex):
+        if "→" in text or "->" in text:
+            return f"{label} looks like a leftover draft: {text}"
+        if text.count("[") != 1 or text.count("]") != 1 or text.index("[") > text.index("]"):
+            return f"{label} needs exactly one [highlight]: {text}"
+    hl = ex[0][ex[0].index("[") + 1:ex[0].index("]")]
+    first = next((ch for ch in hl if 0xAC00 <= ord(ch) <= 0xD7A3), "")
+    w0 = word[0]
+    if first and 0xAC00 <= ord(w0) <= 0xD7A3 and (ord(first) - 0xAC00) // 588 != (ord(w0) - 0xAC00) // 588:
+        return f"highlight '{hl}' doesn't look like {word}"
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--krdict", required=True)
@@ -234,8 +265,11 @@ def main():
     ap.add_argument("--freq", required=True)
     ap.add_argument("--extras", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--examples", default=os.path.join(os.path.dirname(__file__), "examples"),
+                    help="dir of .txt files with lines 'word | Korean | Vietnamese | English' (highlight in [brackets])")
     ap.add_argument("--report", default=None)
     a = ap.parse_args()
+    simple_examples = load_examples(a.examples)
 
     kd = json.load(open(a.krdict, encoding="utf-8"))
     idx = nikl_index(json.load(open(a.nikl, encoding="utf-8")))
@@ -306,6 +340,23 @@ def main():
         seen.add(key)
         cards.append(card)
 
+    # Simple, translated example sentences replace the dictionary examples.
+    missing_ex, bad_ex = [], []
+    for c in cards:
+        ex = simple_examples.get(c["w"])
+        if not ex:
+            missing_ex.append(c["w"])
+            continue
+        problem = check_example(c["w"], ex)
+        if problem:
+            bad_ex.append(f"{c['w']}: {problem}")
+        m0 = c["m"][0]
+        m0["x"], m0["xv"], m0["xe"] = ex
+    if missing_ex:
+        print(f"WARNING: {len(missing_ex)} cards have no simple example, e.g. {missing_ex[:10]}")
+    for b in bad_ex:
+        print("CHECK:", b)
+
     fallback_en = [c for c in cards if c["m"][0].get("_fb")]
     for c in cards:
         for m in c["m"]:
@@ -326,6 +377,16 @@ def main():
     }
     with open(os.path.join(a.out, "meta.json"), "w", encoding="utf-8") as fh:
         json.dump(meta, fh, ensure_ascii=False, separators=(",", ":"))
+    # Search index, one row per card in order: [word, vi, en, other vi, other en].
+    search = []
+    for c in cards:
+        m0, rest = c["m"][0], c["m"][1:]
+        row = [c["w"], m0["vi"], m0["en"], "; ".join(m["vi"] for m in rest), "; ".join(m["en"] for m in rest)]
+        while row[-1] == "":
+            row.pop()
+        search.append(row)
+    with open(os.path.join(a.out, "search.json"), "w", encoding="utf-8") as fh:
+        json.dump(search, fh, ensure_ascii=False, separators=(",", ":"))
 
     stats = collections.Counter()
     for c in cards:

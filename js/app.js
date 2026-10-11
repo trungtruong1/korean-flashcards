@@ -28,6 +28,9 @@
     left: svg('<path d="M19 12H5M11 18l-6-6 6-6"/>'),
     right: svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
     x: svg('<path d="M18 6L6 18M6 6l12 12"/>'),
+    copy: svg('<rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15h-.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/>'),
+    search: svg('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>'),
+    user: svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
   };
 
   var whaleId = 0;
@@ -75,7 +78,39 @@
     toast.t = setTimeout(function () { toastEl.classList.remove("show"); }, 2600);
   }
 
+  function copyText(text) {
+    var done = function () { toast("Copied: " + (text.length > 36 ? text.slice(0, 36) + "…" : text)); };
+    var fallback = function () {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { /* not supported */ }
+      ta.remove();
+      if (ok) done(); else toast("Couldn't copy on this browser");
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
+
+  // Pronunciation guide in Vietnamese letters (see js/pronounce.js).
+  function guide(c) { return window.viPron(c.pr, c.w); }
+
+  // Lowercase, drop Vietnamese tone marks and đ → d, for accent-free search.
+  function fold(s) { return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d"); }
+
   // Wrap the word (or its verb stem) in the example sentence with <mark>.
+  // Example sentences mark the studied word with [brackets].
+  function markup(text) {
+    return esc(text).replace(/\[([^\]]+)\]/g, "<mark>$1</mark>");
+  }
+  function plain(text) { return text.replace(/[[\]]/g, ""); }
+
+  // Fallback for examples without [brackets]: guess the word in the sentence.
   function highlight(ex, w) {
     var stems = [];
     if (w.length >= 2 && w.slice(-1) === "다") {
@@ -113,19 +148,24 @@
           progress: raw.progress && typeof raw.progress === "object" ? raw.progress : {},
           settings: Object.assign({}, DEFAULT_SETTINGS, raw.settings || {}),
           last: raw.last || 1,
+          updated: raw.updated || 0,
+          syncUid: raw.syncUid || null,
         };
       }
     } catch (e) { /* fall through to a fresh store */ }
-    return { progress: {}, settings: Object.assign({}, DEFAULT_SETTINGS), last: 1 };
+    return { progress: {}, settings: Object.assign({}, DEFAULT_SETTINGS), last: 1, updated: 0, syncUid: null };
   }
   var store = load();
 
-  function save() {
+  // progressChanged: the word statuses changed (so cloud sync should upload them).
+  function save(progressChanged) {
+    if (progressChanged) store.updated = Date.now();
     try {
       localStorage.setItem(STORE_KEY, JSON.stringify(store));
     } catch (e) {
       if (!saveWarned) { saveWarned = true; toast("This browser won't let me save progress (private mode?)"); }
     }
+    if (progressChanged && window.goraeSync) window.goraeSync.push();
   }
   function setProgress(n) { return store.progress[n] || (store.progress[n] = {}); }
   function setCounts(n) {
@@ -257,7 +297,12 @@
     var html =
       '<header class="top"><div class="brand">' + whale() +
       '<div><h1>고래 단어장</h1><p>Gorae Words · ' + fmt(total) + ' most common Korean words</p></div></div>' +
-      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></header>" +
+      '<div class="top-btns">' + accountButton() +
+      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></div></header>" +
+      '<div class="search"><span class="s-icon">' + icon.search + "</span>" +
+      '<input id="q" type="search" placeholder="Search 한국어, Tiếng Việt or English" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Search words" value="' + esc(searchQuery) + '">' +
+      '<button class="s-clear" data-act="clear-search" aria-label="Clear search"' + (searchQuery ? "" : " hidden") + ">" + icon.x + "</button></div>" +
+      '<div id="results"></div><div id="home-body"' + (searchQuery ? " hidden" : "") + ">" +
       '<section class="hero"><div><h2>Your progress</h2>' +
       '<div class="big">' + fmt(known) + " <small>/ " + fmt(total) + " words</small></div>" +
       '<div class="bar" role="img" aria-label="' + fmt(known) + " learned, " + fmt(learning) + ' still learning">' +
@@ -285,8 +330,142 @@
       html += "</div></details>";
     }
     html += '<footer class="foot">Words ranked by how often they appear in Korean videos, shows and books.<br>' +
-      'Meanings and examples from the National Institute of Korean Language dictionary. <button data-act="about">About &amp; credits</button></footer>';
+      'Meanings from the National Institute of Korean Language dictionary; simple example sentences written by AI. <button data-act="about">About &amp; credits</button></footer></div>';
     app.innerHTML = html;
+    if (searchQuery) runSearch();
+  }
+
+  // ---------- Search ----------
+  var searchQuery = "";
+  var searchIndex = null; // promise of [{w, vi, en, pos, ...folded fields}]
+
+  function getSearchIndex() {
+    if (!searchIndex) {
+      searchIndex = getJSON("data/search.json").then(function (rows) {
+        // Row: [word, vi, en, other meanings vi, other meanings en]; position = index + 1.
+        return rows.map(function (r, i) {
+          var split = function (s) { return s ? s.split(/\s*[,;|]\s*/).filter(Boolean) : []; };
+          return {
+            w: r[0], vi: r[1], en: r[2], pos: i + 1,
+            kw: r[0].normalize("NFD"),
+            items: [split(r[1].toLowerCase()), split(r[2].toLowerCase()), split((r[3] || "").toLowerCase()), split((r[4] || "").toLowerCase())],
+            folded: [split(fold(r[1])), split(fold(r[2])), split(fold(r[3] || "")), split(fold(r[4] || ""))],
+          };
+        });
+      }).catch(function (e) { searchIndex = null; throw e; });
+    }
+    return searchIndex;
+  }
+
+  function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+  // Lower score = better match: 0 exact, 1 starts the gloss, 2 whole word inside it, 4 anywhere.
+  function itemScore(items, q, wordRe) {
+    var best = 9;
+    for (var k = 0; k < items.length && best > 0; k++) {
+      var t = items[k];
+      if (t === q) best = 0;
+      else if (t.indexOf(q) === 0 && wordRe.test(t)) best = Math.min(best, 1);
+      else if (wordRe.test(t)) best = Math.min(best, 2);
+      else if (q.length >= 3 && t.indexOf(q) >= 0) best = Math.min(best, 4);
+    }
+    return best;
+  }
+
+  function searchWords(rows, query) {
+    var q = query.trim().toLowerCase();
+    if (!q) return [];
+    var out = [];
+    if (/[ᄀ-ᇿ㄰-㆏가-힣]/.test(q)) {
+      var kq = q.replace(/\s+/g, "").normalize("NFD");
+      rows.forEach(function (r) {
+        var i = r.kw.indexOf(kq);
+        if (i < 0) return;
+        out.push({ r: r, s: r.kw === kq ? 0 : i === 0 ? 1 : 3 });
+      });
+    } else {
+      var fq = fold(q), accented = fq !== q;
+      var re = new RegExp("(^|[^\\p{L}\\p{N}])" + escRe(q) + "($|[^\\p{L}\\p{N}])", "u");
+      var fre = new RegExp("(^|[^\\p{L}\\p{N}])" + escRe(fq) + "($|[^\\p{L}\\p{N}])", "u");
+      rows.forEach(function (r) {
+        var best = 9;
+        for (var f = 0; f < 4; f++) {
+          var extra = f >= 2 ? 1.5 : 0;
+          // Typing with Vietnamese accents prefers exact-accent matches; without them, any accent matches.
+          var s = accented ? Math.min(itemScore(r.items[f], q, re), itemScore(r.folded[f], fq, fre) + 1.5) : itemScore(r.folded[f], fq, fre);
+          if (s < 9) best = Math.min(best, s + extra);
+        }
+        if (best < 9) out.push({ r: r, s: best });
+      });
+    }
+    out.sort(function (a, b) { return a.s - b.s || a.r.pos - b.r.pos; });
+    return out;
+  }
+
+  function statusOf(pos, w) {
+    var n = Math.ceil(pos / meta.setSize);
+    var s = (store.progress[n] || {})[w];
+    return s === 1 ? "known" : s === 0 ? "learning" : "new";
+  }
+
+  function runSearch() {
+    var box = document.getElementById("results"), body = document.getElementById("home-body");
+    var clear = app.querySelector(".s-clear");
+    if (!box) return;
+    var query = searchQuery;
+    if (clear) clear.hidden = !query;
+    if (!query.trim()) { box.innerHTML = ""; if (body) body.hidden = false; return; }
+    if (body) body.hidden = true;
+    if (!searchIndex) box.innerHTML = '<p class="hint">Loading words…</p>';
+    getSearchIndex().then(function (rows) {
+      if (query !== searchQuery || !document.getElementById("results")) return;
+      var found = searchWords(rows, query), LIMIT = 60;
+      var labels = { known: "Got it", learning: "Not yet", new: "New" };
+      box.innerHTML = found.length
+        ? '<p class="res-count">' + fmt(found.length) + " word" + (found.length > 1 ? "s" : "") + (found.length > LIMIT ? " · showing the " + LIMIT + " best" : "") + "</p>" +
+          '<ul class="word-list">' + found.slice(0, LIMIT).map(function (x) {
+            var r = x.r, st = statusOf(r.pos, r.w);
+            return '<li><button class="word-row result" data-open="' + r.pos + '"><span class="n">#' + fmt(r.pos) + "</span>" +
+              '<span class="res-main"><span class="w" lang="ko">' + esc(r.w) + '</span><span class="m"><b lang="vi">' + esc(r.vi) + "</b> · " + esc(r.en) + "</span></span>" +
+              '<span class="res-side"><span class="status-btn ' + st + '">' + labels[st] + '</span><span class="res-set">Set ' + Math.ceil(r.pos / meta.setSize) + "</span></span></button></li>";
+          }).join("") + "</ul>"
+        : '<div class="no-results">' + whale() + "<p>No words match “" + esc(query) + "”.</p></div>";
+    }).catch(function () {
+      if (query === searchQuery) box.innerHTML = '<p class="hint">Couldn\'t load the search list. Check your connection and try again.</p>';
+    });
+  }
+
+  // Card details in a popup (from search results).
+  function openCard(pos) {
+    var n = Math.ceil(pos / meta.setSize), i = (pos - 1) % meta.setSize;
+    getSet(n).then(function (cards) {
+      var c = cards[i];
+      if (!c) return;
+      openModal(
+        '<h2><span class="cm-title">#' + fmt(pos) + " · Set " + n + '</span><button class="icon-btn" data-act="close" aria-label="Close">' + icon.x + "</button></h2>" +
+        '<div class="card-detail">' + backHtml(c) + "</div>" +
+        '<div class="cm-status"><span>Status</span>' + statusSeg(n, c.w) + "</div>" +
+        '<div class="row-btns cm-go"><a class="btn mint small" href="#/set/' + n + '">Study Set ' + n + "</a>" +
+        '<a class="btn small" href="#/set/' + n + '/list">Word list</a></div>'
+      );
+    }).catch(function () { toast("Couldn't load that word"); });
+  }
+
+  function statusSeg(n, w) {
+    var s = (store.progress[n] || {})[w];
+    var cur = s === 1 ? "1" : s === 0 ? "0" : "new";
+    return '<div class="seg" role="group" aria-label="Status">' + [["new", "New"], ["1", "Got it"], ["0", "Not yet"]].map(function (o) {
+      return '<button data-mark="' + o[0] + '" data-set="' + n + '" data-word="' + esc(w) + '" aria-pressed="' + (cur === o[0]) + '">' + o[1] + "</button>";
+    }).join("") + "</div>";
+  }
+
+  function markWord(btn) {
+    var n = parseInt(btn.dataset.set, 10), w = btn.dataset.word, v = btn.dataset.mark;
+    var prog = setProgress(n);
+    if (v === "new") delete prog[w]; else prog[w] = Number(v);
+    save(true);
+    btn.parentNode.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+    if (document.getElementById("results")) runSearch();
   }
 
   // ---------- Study ----------
@@ -381,8 +560,9 @@
         '<div class="vi">' + esc(firstLang(m0)) + '</div><div class="en">' + esc(secondLang(m0)) + "</div></div>";
     } else {
       front = '<div class="word' + (c.w.length > 4 ? " long" : "") + '" lang="ko">' + esc(c.w) + "</div>" +
-        (st.roman ? '<div class="roman">' + esc(window.romanize(c.pr || c.w, c.w)) + "</div>" : "") +
-        '<button class="speak" data-say="' + esc(c.w) + '" aria-label="Play pronunciation">' + icon.sound + "</button>";
+        (st.roman ? '<div class="guide" lang="vi" title="Pronunciation in Vietnamese letters">' + esc(guide(c)) + "</div>" : "") +
+        '<div class="front-btns"><button class="speak" data-say="' + esc(c.w) + '" aria-label="Play pronunciation">' + icon.sound + "</button>" +
+        '<button class="speak copy" data-copy="' + esc(c.w) + '" aria-label="Copy word">' + icon.copy + "</button></div>";
     }
     return '<div class="card ' + cls + '">' +
       '<div class="stamp know">GOT IT</div><div class="stamp learn">NOT YET</div>' +
@@ -405,23 +585,30 @@
         (m0.dv ? '<p lang="vi"><b>VI</b> ' + esc(m0.dv) + "</p>" : "") +
         (m0.d ? '<p lang="en"><b>EN</b> ' + esc(m0.d) + "</p>" : "") + "</details>"
       : "";
-    var ex = m0.x
-      ? '<div class="example"><p lang="ko"><span class="lbl">EXAMPLE</span>' + highlight(m0.x, c.w) + "</p>" +
-        '<button class="speak sm" data-say="' + esc(m0.x) + '" aria-label="Play example sentence">' + icon.sound + "</button></div>"
-      : "";
+    var ex = "";
+    if (m0.x) {
+      var trVi = m0.xv ? '<p class="tr" lang="vi"><span class="flag">VI</span><span>' + markup(m0.xv) + "</span></p>" : "";
+      var trEn = m0.xe ? '<p class="tr" lang="en"><span class="flag en">EN</span><span>' + markup(m0.xe) + "</span></p>" : "";
+      ex = '<div class="example"><div class="ex-body"><span class="lbl">EXAMPLE</span>' +
+        '<p class="ko" lang="ko">' + (m0.x.indexOf("[") >= 0 ? markup(m0.x) : highlight(m0.x, c.w)) + "</p>" +
+        (st.viFirst ? trVi + trEn : trEn + trVi) + "</div>" +
+        '<div class="ex-btns"><button class="speak sm" data-say="' + esc(plain(m0.x)) + '" aria-label="Play example sentence">' + icon.sound + "</button>" +
+        '<button class="speak sm copy" data-copy="' + esc(plain(m0.x)) + '" aria-label="Copy example sentence">' + icon.copy + "</button></div></div>";
+    }
     var alts = c.m.slice(1).map(function (m) {
       return '<div class="alt"><span class="pos">' + esc(m.p || "") + (m.h ? " " + esc(m.h) : "") + "</span> " +
         '<span class="vi" lang="vi">' + esc(m.vi) + '</span> · <span class="en">' + esc(m.en) + "</span></div>";
     }).join("");
-    var sub = (st.roman ? '<span class="r">' + esc(window.romanize(c.pr || c.w, c.w)) + "</span>" : "") +
+    var sub = (st.roman ? '<span class="r" lang="vi" title="Pronunciation in Vietnamese letters">' + esc(guide(c)) + "</span>" : "") +
       (c.pr ? '<span class="pr" lang="ko" title="Pronounced">[' + esc(c.pr) + "]</span>" : "");
     return '<div class="back-head"><div class="bh-text"><span class="w" lang="ko">' + esc(c.w) + "</span>" +
       (sub ? '<div class="bh-sub">' + sub + "</div>" : "") + "</div>" +
+      '<button class="speak sm copy" data-copy="' + esc(c.w) + '" aria-label="Copy word">' + icon.copy + "</button>" +
       '<button class="speak" data-say="' + esc(c.w) + '" aria-label="Play pronunciation">' + icon.sound + "</button></div>" +
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
       '<div class="mean">' + langLines(m0) + "</div>" + defs + ex +
       (alts ? '<div class="also"><span class="lbl">ALSO MEANS</span>' + alts + "</div>" : "") +
-      (c.ai ? '<div class="ai-note">✦ Meaning and example written by AI, not from the dictionary.</div>' : "");
+      (c.ai ? '<div class="ai-note">✦ Meaning written by AI, not from the dictionary.</div>' : "");
   }
 
   function attachDrag(el) {
@@ -483,7 +670,7 @@
     S.history.push({ w: d.c.w, prev: prog[d.c.w], dir: dir });
     prog[d.c.w] = dir > 0 ? 1 : 0;
     if (dir > 0) S.known++; else S.learning++;
-    save();
+    save(true);
     if (el) {
       var stamp = el.querySelector(dir > 0 ? ".stamp.know" : ".stamp.learn");
       if (stamp) stamp.style.opacity = 1;
@@ -505,7 +692,7 @@
     var prog = setProgress(S.n);
     if (h.prev === undefined) delete prog[h.w]; else prog[h.w] = h.prev;
     if (h.dir > 0) S.known--; else S.learning--;
-    save();
+    save(true);
     S.i--;
     if (document.getElementById("deck")) renderDeck(false);
     else renderStudy();
@@ -589,7 +776,7 @@
     if (s === undefined) prog[w] = 1;
     else if (s === 1) prog[w] = 0;
     else delete prog[w];
-    save();
+    save(true);
     var key = prog[w] === 1 ? "known" : prog[w] === 0 ? "learning" : "new";
     btn.className = "status-btn " + key;
     btn.textContent = STATUS[prog[w]] ? STATUS[prog[w]][1] : "New";
@@ -626,13 +813,13 @@
       "<h3>Cards</h3>" +
       '<div class="opt"><div>Card front<small>What you see before flipping</small></div>' + seg("front", [["ko", "한국어"], ["meaning", "Meaning"]]) + "</div>" +
       '<div class="opt"><div>Meaning order</div>' + seg("viFirst", [["true", "Tiếng Việt"], ["false", "English"]]) + "</div>" +
-      '<div class="opt"><div>Romanization<small>e.g. 없다 → eopda</small></div>' + sw("roman") + "</div>" +
+      '<div class="opt"><div>Pronunciation guide<small>In Vietnamese letters with Seoul pitch: 보다 → bồ đa · <button class="link-btn" data-act="guide-help">How to read it</button></small></div>' + sw("roman") + "</div>" +
       '<div class="opt"><div>Auto-play audio<small>Say each word when it appears</small></div>' + sw("autoplay") + "</div>" +
       '<div class="opt"><div>Shuffle cards<small>Applies when you open a set</small></div>' + sw("shuffle") + "</div>" +
       "<h3>Look</h3>" +
       '<div class="opt"><div>Theme</div>' + seg("theme", [["auto", "Auto"], ["light", "Light"], ["dark", "Dark"]]) + "</div>" +
       "<h3>Progress</h3>" +
-      "<p>Your progress is saved in this browser only. Export a backup to move it to another phone or computer.</p>" +
+      progressNote() +
       '<div class="row-btns"><button class="btn small" data-act="export">Export backup</button>' +
       '<button class="btn small" data-act="import">Import backup</button>' +
       '<button class="btn small ghost" data-act="reset">Reset all</button></div>' +
@@ -650,13 +837,121 @@
       "Opening a set again shows only the words you haven't marked “got it”.</p>" +
       "<h3>Where the words come from</h3>" +
       '<p><b>Ranking:</b> word frequency list from <a href="https://kimchi-reader.app/explore/freq/words" target="_blank" rel="noopener">Kimchi Reader</a>, based on Korean YouTube videos, TV shows and books. Proper nouns, slang fragments and narrow jargon were left out.</p>' +
-      '<p><b>Meanings &amp; examples:</b> <a href="https://krdict.korean.go.kr" target="_blank" rel="noopener">한국어기초사전 (Korean Learners\' Dictionary)</a> by the National Institute of Korean Language, licensed ' +
+      '<p><b>Meanings:</b> <a href="https://krdict.korean.go.kr" target="_blank" rel="noopener">한국어기초사전 (Korean Learners\' Dictionary)</a> by the National Institute of Korean Language, licensed ' +
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/kr/" target="_blank" rel="noopener">CC BY-SA 2.0 KR</a>. The word data on this site is shared under the same license. ' +
       "Homonyms are ordered using NIKL's 한국어 학습용 어휘 목록.</p>" +
-      "<p><b>AI-written cards:</b> a few hundred common words (new loanwords and slang like 맛집, 알바, 헐) aren't in the dictionary. Their meanings and examples were written by AI and are marked <span class=\"chip ai\">AI</span>.</p>" +
+      "<p><b>Example sentences</b> and their Vietnamese and English translations were written by AI (Claude) to keep them short and beginner-friendly. They may contain small mistakes.</p>" +
+      "<p><b>AI-written cards:</b> a few hundred common words (new loanwords and slang like 맛집, 알바, 헐) aren't in the dictionary. Their meanings were written by AI and are marked <span class=\"chip ai\">AI</span>.</p>" +
+      "<p><b>Pronunciation guide:</b> generated from the dictionary's pronunciations. <button class=\"link-btn\" data-act=\"guide-help\">How to read it</button></p>" +
       "<p><b>Audio</b> uses your device's built-in Korean voice.</p>"
     );
   }
+
+  function openGuideHelp() {
+    var ex = function (w, pr) { return '<tr><td lang="ko">' + w + '</td><td lang="vi"><b>' + esc(window.viPron(pr, w)) + "</b></td></tr>"; };
+    openModal(
+      '<h2>Pronunciation guide <button class="icon-btn" data-act="close" aria-label="Close">' + icon.x + "</button></h2>" +
+      "<p>Each word is written with Vietnamese letters the way Seoul speakers actually say it, including sound changes (있다 sounds like 읻따, 한국어 like 한구거).</p>" +
+      "<h3>Pitch (the tone marks)</h3>" +
+      "<p>Korean has no word tones, but Seoul speech has a melody. Words starting with <b>ㅋ ㅌ ㅍ ㅊ, ㄲ ㄸ ㅃ ㅆ ㅉ, ㅅ or ㅎ</b> start high; all other words start low and then rise.</p>" +
+      "<p><b>Dấu huyền / dấu nặng</b> (bồ, ịt) = say it lower. <b>No mark / dấu sắc</b> (đa, hác) = higher, level. In longer words the second-to-last syllable dips again.</p>" +
+      '<table class="guide-table">' + ex("보다") + ex("사다") + ex("있다", "읻따") + ex("감사합니다", "감사함니다") + ex("고마워요") + "</table>" +
+      "<h3>Letters</h3>" +
+      "<p><b>kk, tt, pp, ss, jj</b> = tense consonants (ㄲ ㄸ ㅃ ㅆ ㅉ): tighten your throat, no puff of air. " +
+      "<b>kh, th, p, ch</b> = ㅋ ㅌ ㅍ ㅊ with a strong puff of air. " +
+      "<b>c/k, t, b, ch</b> = ㄱ ㄷ ㅂ ㅈ at the start of a word; between vowels they soften to <b>g, đ, b</b>. " +
+      "<b>ơ</b> = ㅓ, <b>ư</b> = ㅡ, <b>ô</b> = ㅗ, <b>x</b> = ㅅ, <b>r</b> = ㄹ between vowels (a light tap), <b>l</b> = ㄹ at the end.</p>" +
+      "<p>It's a guide, not a replacement for listening: tap the speaker to hear the word.</p>"
+    );
+  }
+
+  // ---------- Account (optional cloud sync, see js/sync.js) ----------
+  function syncOn() { return !!(window.GORAE_FIREBASE && window.GORAE_FIREBASE.apiKey); }
+  function syncUser() { return window.goraeSync ? window.goraeSync.user() : null; }
+
+  function accountButton() {
+    if (!syncOn()) return "";
+    var u = syncUser();
+    var label = u ? "Account: " + (u.email || "signed in") : "Sign in to save progress";
+    var face = u ? esc((u.displayName || u.email || "?").trim().charAt(0).toUpperCase()) : icon.user;
+    return '<button class="icon-btn acct' + (u ? " in" : "") + '" data-act="account" aria-label="' + esc(label) + '" title="' + esc(label) + '">' + face + "</button>";
+  }
+
+  function progressNote() {
+    if (!syncOn()) return "<p>Your progress is saved in this browser. Export a backup to move it to another phone or computer.</p>";
+    var u = syncUser();
+    return u
+      ? '<p>Signed in as <b>' + esc(u.email || u.displayName || "you") + "</b>: your progress syncs between your devices. " +
+        '<button class="link-btn" data-act="account">Account</button></p>'
+      : '<p>Your progress is saved in this browser. <button class="link-btn" data-act="account">Sign in</button> to keep it in your account and use it on any device.</p>';
+  }
+
+  var GOOGLE_G = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+
+  function openAccount() {
+    var sync = window.goraeSync, u = syncUser(), body;
+    if (!sync) {
+      body = "<p>Loading sign-in…</p>";
+    } else if (u) {
+      body = "<p>Signed in as <b>" + esc(u.email || u.displayName || "you") + "</b>.</p>" +
+        "<p>Your progress is saved to your account and syncs between your devices automatically.</p>" +
+        '<p class="sync-state">' + esc(sync.status()) + "</p>" +
+        '<div class="row-btns"><button class="btn small ghost" data-act="logout">Sign out</button></div>';
+    } else {
+      body = "<p>Sign in to save your progress to your account and continue on any phone or computer. What you've already studied here is kept and added to your account.</p>" +
+        '<button class="btn block google" data-act="login-google">' + GOOGLE_G + "Continue with Google</button>" +
+        '<div class="or"><span>or with email</span></div>' +
+        '<form class="login-form" id="loginForm" novalidate>' +
+        '<input type="email" id="lgEmail" placeholder="Email" autocomplete="email" required>' +
+        '<input type="password" id="lgPass" placeholder="Password (at least 6 characters)" autocomplete="current-password" minlength="6" required>' +
+        '<div class="row-btns"><button class="btn mint small" type="submit" data-mode="in">Sign in</button>' +
+        '<button class="btn small" type="submit" data-mode="up">Create account</button>' +
+        '<button class="link-btn" type="button" data-act="reset-pw">Forgot password?</button></div></form>';
+    }
+    openModal('<div class="acct-modal"><h2>Account <button class="icon-btn" data-act="close" aria-label="Close">' + icon.x + "</button></h2>" + body + "</div>");
+  }
+
+  function emailLogin(mode) {
+    var sync = window.goraeSync;
+    var email = (document.getElementById("lgEmail") || {}).value || "";
+    var pass = (document.getElementById("lgPass") || {}).value || "";
+    if (!sync) return;
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) { toast("Type your email address"); return; }
+    if (pass.length < 6) { toast("Passwords need at least 6 characters"); return; }
+    (mode === "up" ? sync.signUpEmail : sync.signInEmail)(email.trim(), pass).catch(function (err) { toast(sync.errorText(err)); });
+  }
+
+  // Re-draw the home page or word list after synced progress arrives, without
+  // touching a study session in progress.
+  function refreshView() {
+    if (S || !meta) return;
+    var parts = location.hash.replace(/^#\/?/, "").split("/");
+    var n = parseInt(parts[1], 10);
+    if (parts[0] === "set" && parts[2] === "list" && n >= 1 && n <= meta.sets) { renderList(n); return; }
+    if (parts[0] === "set") return;
+    var q = document.getElementById("q"), typing = q && document.activeElement === q;
+    renderHome();
+    if (typing) { q = document.getElementById("q"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+  }
+
+  // Used by js/sync.js.
+  window.gorae = {
+    getProgress: function () { return { progress: store.progress, updated: store.updated || 0, syncUid: store.syncUid }; },
+    applyRemote: function (progress, updated, uid) {
+      store.progress = progress && typeof progress === "object" ? progress : {};
+      store.updated = updated || Date.now();
+      store.syncUid = uid;
+      save();
+      refreshView();
+    },
+    setSyncUid: function (uid) { store.syncUid = uid; save(); },
+    authChanged: function () {
+      var b = app.querySelector('[data-act="account"]');
+      if (b) b.outerHTML = accountButton();
+      if (document.querySelector(".modal .acct-modal")) openAccount();
+    },
+    toast: toast,
+  };
 
   function exportBackup() {
     var data = JSON.stringify({ app: "gorae-words", version: 1, exported: new Date().toISOString(), progress: store.progress, settings: store.settings }, null, 1);
@@ -678,7 +973,7 @@
         if (!window.confirm("Replace your current progress with this backup?")) return;
         store.progress = d.progress;
         store.settings = Object.assign({}, DEFAULT_SETTINGS, d.settings || {});
-        save();
+        save(true);
         applyTheme();
         toast("Backup restored");
         route();
@@ -699,12 +994,15 @@
 
   // ---------- Events ----------
   document.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-act],[data-say],[data-go],[data-toggle],[data-filter],[data-setting]");
+    var t = e.target.closest("[data-act],[data-say],[data-copy],[data-open],[data-mark],[data-go],[data-toggle],[data-filter],[data-setting]");
     if (!t) {
       if (e.target.classList && e.target.classList.contains("modal-bg")) closeModal();
       return;
     }
     if (t.dataset.say) { say(t.dataset.say); return; }
+    if (t.dataset.copy) { copyText(t.dataset.copy); return; }
+    if (t.dataset.open) { openCard(parseInt(t.dataset.open, 10)); return; }
+    if (t.dataset.mark) { markWord(t); return; }
     if (t.dataset.go) { go(t.dataset.go); return; }
     if (t.dataset.toggle) { toggleStatus(t); return; }
     if (t.dataset.filter) {
@@ -730,10 +1028,29 @@
       case "reload": location.reload(); break;
       case "export": exportBackup(); break;
       case "import": document.getElementById("importFile").click(); break;
+      case "guide-help": openGuideHelp(); break;
+      case "account": openAccount(); break;
+      case "login-google":
+        if (window.goraeSync) window.goraeSync.signInGoogle().catch(function (err) { var m = window.goraeSync.errorText(err); if (m) toast(m); });
+        break;
+      case "logout":
+        if (window.goraeSync) window.goraeSync.signOut().then(function () { toast("Signed out. Your progress stays on this device."); });
+        break;
+      case "reset-pw":
+        var em = ((document.getElementById("lgEmail") || {}).value || "").trim();
+        if (!em) { toast("Type your email first, then tap “Forgot password?”"); break; }
+        window.goraeSync.resetPassword(em).then(function () { toast("Password reset email sent to " + em); }, function (err) { toast(window.goraeSync.errorText(err)); });
+        break;
+      case "clear-search":
+        searchQuery = "";
+        var qi = document.getElementById("q");
+        if (qi) { qi.value = ""; qi.focus(); }
+        runSearch();
+        break;
       case "reset":
         if (window.confirm("Reset ALL your progress? This can't be undone.")) {
           store.progress = {};
-          save();
+          save(true);
           closeModal();
           toast("Progress reset");
           route();
@@ -748,8 +1065,25 @@
     if (t.id === "importFile" && t.files && t.files[0]) importBackup(t.files[0]);
   });
 
+  document.addEventListener("input", function (e) {
+    if (e.target.id === "q") { searchQuery = e.target.value; runSearch(); }
+  });
+
+  document.addEventListener("submit", function (e) {
+    if (e.target.id !== "loginForm") return;
+    e.preventDefault();
+    emailLogin(e.submitter && e.submitter.dataset.mode === "up" ? "up" : "in");
+  });
+
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") { closeModal(); return; }
+    if (e.target.id === "q" && e.key === "Enter") { e.target.blur(); return; }
+    if (e.key === "/" && !S && document.getElementById("q") && !document.querySelector(".modal-bg") &&
+        !(e.target.closest && e.target.closest("input, textarea"))) {
+      e.preventDefault();
+      document.getElementById("q").focus();
+      return;
+    }
     if (!S || !document.getElementById("stage") || document.querySelector(".modal-bg")) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var onControl = e.target.closest && e.target.closest("button, a, input, summary");

@@ -1,0 +1,250 @@
+상태 | 할머니 [상태]가 좋아졌어요. | [Tình trạng] của bà đã khá hơn. | Grandma's [condition] got better.
+애 | [애]가 울어요. | [Đứa bé] đang khóc. | The [kid] is crying.
+쉽다 | 이 문제는 [쉬워요]. | Bài này [dễ]. | This problem is [easy].
+안녕하다 | [안녕하세요]! 저는 민수예요. | [Xin chào]! Tôi là Minsu. | [Hello]! I'm Minsu.
+필요하다 | 물이 [필요해요]. | Tôi [cần] nước. | I [need] water.
+통하다 | 이 방은 바람이 잘 [통해요]. | Phòng này gió [lưu thông] tốt. | Air [flows] well in this room.
+후 | 수업 [후]에 만나요. | Gặp nhau [sau] giờ học nhé. | Let's meet [after] class.
+기다리다 | 친구를 [기다려요]. | Tôi đang [đợi] bạn. | I'm [waiting] for my friend.
+두다 | 열쇠를 책상 위에 [뒀어요]. | Tôi đã [để] chìa khóa trên bàn. | I [left] the key on the desk.
+묻다 | 길을 [물었어요]. | Tôi đã [hỏi] đường. | I [asked] for directions.
+물 | [물] 한 잔 주세요. | Cho tôi một ly [nước]. | A glass of [water], please.
+역시 | [역시] 엄마 요리가 최고예요. | [Quả nhiên] món mẹ nấu là ngon nhất. | [As expected], Mom's cooking is the best.
+거의 | 숙제를 [거의] 다 했어요. | Tôi làm bài tập [gần] xong rồi. | I'm [almost] done with my homework.
+원래 | 이 건물은 [원래] 학교였어요. | Tòa nhà này [vốn] là trường học. | This building was [originally] a school.
+일어나다 | 아침 7시에 [일어나요]. | Tôi [thức dậy] lúc 7 giờ sáng. | I [get up] at 7 a.m.
+이미 | 기차가 [이미] 떠났어요. | Tàu [đã] đi mất rồi. | The train has [already] left.
+얘기하다 | 선생님께 [얘기했어요]. | Tôi đã [nói] với thầy. | I [told] the teacher.
+꼭 | [꼭] 다시 오세요. | [Nhất định] quay lại nhé. | [Be sure to] come again.
+작다 | 이 방은 [작아요]. | Phòng này [nhỏ]. | This room is [small].
+미국 | [미국]에 가 봤어요? | Bạn đã đến [Mỹ] chưa? | Have you been to [America]?
+앉다 | 여기 [앉으세요]. | Mời [ngồi] đây. | Please [sit] here.
+한국 | [한국]은 겨울이 추워요. | Mùa đông ở [Hàn Quốc] lạnh. | Winters in [Korea] are cold.
+웃다 | 아기가 [웃어요]. | Em bé đang [cười]. | The baby is [smiling].
+순간 | 그 [순간] 눈물이 났어요. | Vào [khoảnh khắc] đó, tôi đã rơi nước mắt. | At that [moment], tears came to my eyes.
+사이 | 두 건물 [사이]에 공원이 있어요. | [Giữa] hai tòa nhà có công viên. | There's a park [between] the two buildings.
+제품 | 이 [제품]은 인기가 많아요. | [Sản phẩm] này rất được ưa chuộng. | This [product] is very popular.
+버리다 | 쓰레기를 [버려요]. | Tôi [vứt] rác. | I [throw away] the trash.
+쪽 | 이 [쪽]으로 오세요. | Mời đi [hướng] này. | Come this [way].
+동안 | 방학 [동안] 여행했어요. | Tôi đi du lịch [trong suốt] kỳ nghỉ. | I traveled [during] the vacation.
+아까 | [아까] 전화했어요. | [Lúc nãy] tôi đã gọi điện. | I called [a while ago].
+여자 | 저 [여자]는 배우예요. | [Người phụ nữ] kia là diễn viên. | That [woman] is an actress.
+물론 | [물론]이에요! | [Tất nhiên] rồi! | [Of course]!
+갑자기 | [갑자기] 비가 왔어요. | Trời [bỗng nhiên] mưa. | It [suddenly] started raining.
+내리다 | 눈이 [내려요]. | Tuyết đang [rơi]. | Snow is [falling].
+대 | 저는 [20대]예요. | Tôi đang ở độ tuổi [20]. | I'm in my [20s].
+제일 | 저는 딸기를 [제일] 좋아해요. | Tôi thích dâu tây [nhất]. | I like strawberries [the most].
+놈 | 그 나쁜 [놈]! | Cái [thằng] xấu xa đó! | That bad [guy]!
+살짝 | 문을 [살짝] 열었어요. | Tôi [khẽ] mở cửa. | I opened the door [quietly].
+언니 | [언니], 같이 쇼핑 가요. | [Chị] ơi, đi mua sắm cùng nhau đi. | [Sis], let's go shopping together.
+옆 | 제 [옆]에 앉으세요. | Ngồi [bên cạnh] tôi đi. | Sit [next to] me.
+믿다 | 저는 당신을 [믿어요]. | Tôi [tin] bạn. | I [believe] in you.
+목소리 | [목소리]가 정말 좋아요. | [Giọng nói] của bạn hay quá. | Your [voice] is really nice.
+요즘 | [요즘] 너무 바빠요. | [Dạo này] tôi bận quá. | I'm so busy [these days].
+세상 | [세상]은 정말 넓어요. | [Thế giới] thật rộng lớn. | The [world] is really big.
+길 | [길]을 잃었어요. | Tôi bị lạc [đường]. | I lost my [way].
+사진 | [사진] 좀 찍어 주세요. | Chụp [ảnh] giúp tôi với. | Please take a [picture] for me.
+선생님 | [선생님], 질문 있어요. | [Thầy] ơi, em có câu hỏi. | [Teacher], I have a question.
+자다 | 밤 11시에 [자요]. | Tôi [ngủ] lúc 11 giờ đêm. | I [sleep] at 11 p.m.
+혼자 | 저는 [혼자] 살아요. | Tôi sống [một mình]. | I live [alone].
+이러다 | 제발 [이러지] 마세요. | Xin đừng [làm thế này]. | Please don't [do this].
+맛 | [맛]이 어때요? | [Vị] thế nào? | How's the [taste]?
+방법 | 좋은 [방법]이 있어요. | Tôi có một [cách] hay. | I have a good [way] to do it.
+아빠 | [아빠], 사랑해요. | [Bố] ơi, con yêu bố. | [Dad], I love you.
+얼마나 | 학교까지 [얼마나] 걸려요? | Đến trường mất [bao lâu]? | [How] long does it take to get to school?
+높다 | 저 산은 정말 [높아요]. | Ngọn núi kia [cao] thật. | That mountain is really [high].
+향하다 | 학교를 [향해] 걸어요. | Tôi đi bộ [hướng về] phía trường. | I walk [toward] the school.
+서다 | 여기에 줄을 [서세요]. | Hãy [đứng] xếp hàng ở đây. | Please [stand] in line here.
+걸리다 | 벽에 그림이 [걸려] 있어요. | Trên tường có bức tranh [được treo]. | A picture is [hanging] on the wall.
+갖다 | 저는 큰 꿈을 [갖고] 있어요. | Tôi [có] một ước mơ lớn. | I [have] a big dream.
+아무 | [아무] 데나 앉으세요. | Ngồi [bất cứ] đâu cũng được. | Sit [any]where you like.
+책 | 매일 [책]을 읽어요. | Ngày nào tôi cũng đọc [sách]. | I read [books] every day.
+다니다 | 저는 대학교에 [다녀요]. | Tôi [đi] học đại học. | I [attend] university.
+첫 | [첫] 만남을 기억해요. | Tôi nhớ lần gặp [đầu tiên]. | I remember our [first] meeting.
+어느 | [어느] 것이 좋아요? | Bạn thích cái [nào]? | [Which] one do you like?
+배 | [배]를 타고 섬에 가요. | Chúng tôi đi [thuyền] ra đảo. | We take a [boat] to the island.
+계시다 | 할머니는 집에 [계세요]. | Bà [đang ở] nhà. | Grandma [is] at home.
+참 | 날씨가 [참] 좋네요. | Thời tiết [thật] đẹp. | The weather is [really] nice.
+채 | 옷을 입은 [채]로 잤어요. | Tôi đã ngủ [mà vẫn] mặc nguyên quần áo. | I slept [with] my clothes on.
+빠르다 | KTX는 정말 [빨라요]. | Tàu KTX [nhanh] thật. | The KTX is really [fast].
+저기 | [저기]가 우리 학교예요. | [Đằng kia] là trường chúng tôi. | [Over there] is our school.
+혹시 | [혹시] 민수 씨예요? | [Không biết] anh có phải là Minsu không? | Are you Minsu, [by any chance]?
+귀엽다 | 강아지가 정말 [귀여워요]. | Con cún [dễ thương] quá. | The puppy is so [cute].
+서울 | [서울]은 한국의 수도예요. | [Seoul] là thủ đô của Hàn Quốc. | [Seoul] is the capital of Korea.
+밖 | [밖]에 비가 와요. | [Bên ngoài] trời đang mưa. | It's raining [outside].
+대통령 | [대통령]이 연설을 해요. | [Tổng thống] đang phát biểu. | The [president] is giving a speech.
+어쩌다 | [어쩌다] 이렇게 됐어요? | [Sao lại] thành ra thế này? | [How] did it come to this?
+표정 | [표정]이 왜 그래요? | Sao [nét mặt] bạn như vậy? | What's with that [expression]?
+방 | 제 [방]은 작아요. | [Phòng] tôi nhỏ. | My [room] is small.
+움직이다 | [움직이지] 마세요! | Đừng [cử động]! | Don't [move]!
+고맙다 | 정말 [고마워요]. | [Cảm ơn] bạn nhiều. | [Thank] you so much.
+그리다 | 고양이를 [그렸어요]. | Tôi đã [vẽ] một con mèo. | I [drew] a cat.
+기분 | 오늘 [기분]이 좋아요. | Hôm nay [tâm trạng] tôi rất tốt. | I'm in a good [mood] today.
+재밌다 | 이 게임 진짜 [재밌어요]. | Trò chơi này [vui] thật. | This game is really [fun].
+문 | [문] 좀 닫아 주세요. | Đóng [cửa] giúp tôi. | Please close the [door].
+이상하다 | 맛이 좀 [이상해요]. | Vị hơi [lạ]. | It tastes a bit [strange].
+읽다 | 매일 신문을 [읽어요]. | Tôi [đọc] báo mỗi ngày. | I [read] the newspaper every day.
+결국 | [결국] 시험에 합격했어요. | [Cuối cùng] tôi đã đỗ kỳ thi. | [In the end], I passed the exam.
+죽이다 | 모기를 [죽였어요]. | Tôi đã [giết] con muỗi. | I [killed] a mosquito.
+미치다 | 너무 더워서 [미치겠어요]. | Nóng quá, tôi [phát điên] mất. | It's so hot I'm going [crazy].
+세계 | [세계] 여행을 하고 싶어요. | Tôi muốn đi du lịch vòng quanh [thế giới]. | I want to travel around the [world].
+아버지 | [아버지]는 회사원이세요. | [Bố] tôi là nhân viên văn phòng. | My [father] is an office worker.
+직접 | 제가 [직접] 만들었어요. | Tôi đã [tự tay] làm. | I made it [myself].
+바라보다 | 하늘을 [바라봐요]. | Tôi [ngắm nhìn] bầu trời. | I [gaze] at the sky.
+빠지다 | 물에 [빠졌어요]. | Tôi bị [rơi] xuống nước. | I [fell] into the water.
+인간 | [인간]은 혼자 살 수 없어요. | [Con người] không thể sống một mình. | [Humans] can't live alone.
+바꾸다 | 이 옷을 [바꾸고] 싶어요. | Tôi muốn [đổi] cái áo này. | I want to [exchange] these clothes.
+올라가다 | 계단으로 [올라가요]. | Tôi [đi lên] bằng cầu thang. | I [go up] the stairs.
+돌아가다 | 이제 집에 [돌아가요]. | Giờ tôi [trở về] nhà. | I'm [going back] home now.
+언제 | [언제] 와요? | [Khi nào] bạn đến? | [When] are you coming?
+여러 | [여러] 나라를 여행했어요. | Tôi đã du lịch [nhiều] nước. | I've traveled to [many] countries.
+컬러 | 이 [컬러]가 예뻐요. | [Màu] này đẹp. | This [color] is pretty.
+가능하다 | 카드 결제 [가능해요]? | Thanh toán bằng thẻ [được] không? | Is paying by card [possible]?
+짓다 | 마을에 새 집을 [지어요]. | Họ [xây] nhà mới trong làng. | They're [building] a new house in the village.
+뿐 | 저는 친구가 하나[뿐]이에요. | Tôi [chỉ] có một người bạn. | I have [only] one friend.
+밥 | [밥] 먹었어요? | Bạn ăn [cơm] chưa? | Have you had a [meal]?
+새롭다 | [새로운] 친구를 사귀었어요. | Tôi đã kết bạn [mới]. | I made a [new] friend.
+밤 | [밤]에 별이 보여요. | [Ban đêm] có thể thấy sao. | You can see stars at [night].
+돌아오다 | 언제 [돌아와요]? | Khi nào bạn [trở về]? | When are you [coming back]?
+넘다 | 사람이 100명이 [넘었어요]. | Đã có [hơn] 100 người. | There were [over] 100 people.
+사건 | 어제 큰 [사건]이 있었어요. | Hôm qua đã có một [vụ việc] lớn. | There was a big [incident] yesterday.
+달 | 한 [달]에 한 번 만나요. | Mỗi [tháng] chúng tôi gặp nhau một lần. | We meet once a [month].
+바르다 | 자세를 [바르게] 하세요. | Hãy ngồi [thẳng] lưng. | Sit up [straight].
+자체 | 그 생각 [자체]가 좋아요. | Bản [thân] ý tưởng đó đã hay rồi. | The idea [itself] is good.
+확인하다 | 이메일을 [확인하세요]. | Hãy [kiểm tra] email. | [Check] your email.
+편 | 나는 네 [편]이야. | Tớ đứng về [phía] cậu. | I'm on your [side].
+중국 | [중국]은 아주 커요. | [Trung Quốc] rất rộng lớn. | [China] is very big.
+잠시 | [잠시] 쉬었다가 가요. | Nghỉ [một lát] rồi đi. | Let's rest [for a while] and then go.
+마시다 | 아침에 커피를 [마셔요]. | Buổi sáng tôi [uống] cà phê. | I [drink] coffee in the morning.
+어제 | [어제] 뭐 했어요? | [Hôm qua] bạn làm gì? | What did you do [yesterday]?
+하루 | [하루]에 물을 2리터 마셔요. | Một [ngày] tôi uống 2 lít nước. | I drink 2 liters of water a [day].
+천 | [천] 원만 빌려 주세요. | Cho tôi mượn một [nghìn] won. | Lend me a [thousand] won.
+아침 | [아침]에 운동해요. | Tôi tập thể dục vào [buổi sáng]. | I exercise in the [morning].
+내용 | 이 책은 [내용]이 어려워요. | [Nội dung] cuốn sách này khó. | The [content] of this book is difficult.
+완전 | 이 노래 [완전] 좋아요! | Bài hát này hay [cực kỳ]! | This song is [totally] great!
+옷 | 새 [옷]을 샀어요. | Tôi mua [quần áo] mới. | I bought new [clothes].
+돌리다 | 고개를 [돌렸어요]. | Tôi [quay] đầu lại. | I [turned] my head.
+살 | 저는 스무 [살]이에요. | Tôi hai mươi [tuổi]. | I'm twenty [years old].
+그대로 | [그대로] 두세요. | Cứ để [nguyên như vậy]. | Leave it [as it is].
+맞아 | [맞아], 그거야! | [Đúng rồi], chính nó! | [Right], that's it!
+뜨다 | 물 위에 배가 [떠] 있어요. | Chiếc thuyền đang [nổi] trên mặt nước. | A boat is [floating] on the water.
+학교 | 버스를 타고 [학교]에 가요. | Tôi đi xe buýt đến [trường]. | I take the bus to [school].
+일본 | [일본]에 여행 갔어요. | Tôi đã đi du lịch [Nhật Bản]. | I took a trip to [Japan].
+그러나 | 열심히 했다. [그러나] 실패했다. | Tôi đã cố gắng. [Tuy nhiên] tôi đã thất bại. | I tried hard. [However], I failed.
+저거 | [저거] 뭐예요? | [Cái kia] là gì? | What's [that]?
+노래 | [노래]를 불러요. | Tôi hát một [bài hát]. | I sing a [song].
+이후 | 그 [이후]로 만나지 않았어요. | [Từ] đó chúng tôi không gặp nhau nữa. | We haven't met [since] then.
+원하다 | [원하는] 걸 고르세요. | Hãy chọn thứ bạn [muốn]. | Choose what you [want].
+사랑하다 | 엄마를 [사랑해요]. | Con [yêu] mẹ. | I [love] my mom.
+음 | [음], 잘 모르겠어요. | [Ừm], tôi không chắc. | [Hmm], I'm not sure.
+알리다 | 친구에게 소식을 [알렸어요]. | Tôi đã [báo] tin cho bạn. | I [told] my friend the news.
+아프다 | 배가 [아파요]. | Tôi [đau] bụng. | My stomach [hurts].
+놀라다 | 깜짝 [놀랐어요]. | Tôi [giật mình]. | I was really [surprised].
+밝히다 | 촛불이 방을 [밝혀요]. | Ngọn nến [thắp sáng] căn phòng. | A candle [lights up] the room.
+최근 | [최근]에 이사했어요. | [Gần đây] tôi mới chuyển nhà. | I moved [recently].
+내일 | [내일] 만나요. | [Ngày mai] gặp nhé. | See you [tomorrow].
+길다 | 언니는 머리가 [길어요]. | Chị tôi có mái tóc [dài]. | My sister's hair is [long].
+준비하다 | 시험을 [준비해요]. | Tôi đang [chuẩn bị] cho kỳ thi. | I'm [preparing] for the exam.
+오케이 | [오케이], 좋아요. | [Ô kê], được đấy. | [Okay], sounds good.
+모양 | 하트 [모양] 쿠키예요. | Đây là bánh quy [hình] trái tim. | It's a heart-[shaped] cookie.
+특히 | 저는 과일, [특히] 사과를 좋아해요. | Tôi thích trái cây, [đặc biệt] là táo. | I like fruit, [especially] apples.
+기억 | 좋은 [기억]이에요. | Đó là một [kỷ niệm] đẹp. | It's a good [memory].
+말씀 | 선생님 [말씀]을 잘 들으세요. | Hãy nghe kỹ [lời] thầy nói. | Listen carefully to the teacher's [words].
+오빠 | [오빠], 같이 가요! | [Anh] ơi, đi cùng nhau đi! | [Big brother], let's go together!
+필요 | 갈 [필요]가 없어요. | Không [cần] phải đi. | There's no [need] to go.
+얼마 | 이거 [얼마]예요? | Cái này [bao nhiêu] tiền? | [How much] is this?
+강하다 | 그 선수는 정말 [강해요]. | Cầu thủ đó [mạnh] thật. | That player is really [strong].
+서로 | 우리는 [서로] 도와요. | Chúng tôi giúp đỡ [lẫn nhau]. | We help [each other].
+싫다 | 저는 벌레가 [싫어요]. | Tôi [ghét] côn trùng. | I [hate] bugs.
+무엇 | [무엇]을 도와드릴까요? | Tôi có thể giúp [gì] cho bạn? | [What] can I help you with?
+들리다 | 음악 소리가 [들려요]. | Tôi [nghe thấy] tiếng nhạc. | I can [hear] music.
+경찰 | [경찰]을 불러 주세요! | Hãy gọi [cảnh sát]! | Please call the [police]!
+비슷하다 | 언니랑 저는 얼굴이 [비슷해요]. | Chị tôi và tôi có khuôn mặt [giống] nhau. | My sister and I look [similar].
+현재 | [현재] 서울에 살아요. | [Hiện tại] tôi sống ở Seoul. | I [currently] live in Seoul.
+항상 | 엄마는 [항상] 바빠요. | Mẹ tôi [luôn] bận rộn. | My mom is [always] busy.
+맞추다 | 퍼즐을 다 [맞췄어요]. | Tôi đã [ghép] xong bức tranh xếp hình. | I [put together] the whole puzzle.
+쉬다 | 주말에 집에서 [쉬어요]. | Cuối tuần tôi [nghỉ ngơi] ở nhà. | I [rest] at home on weekends.
+열리다 | 문이 [열렸어요]. | Cửa đã [mở]. | The door [opened].
+궁금하다 | 그게 정말 [궁금해요]. | Tôi rất [tò mò] về điều đó. | I'm really [curious] about that.
+시키다 | 치킨을 [시켰어요]. | Tôi đã [gọi] gà rán. | I [ordered] chicken.
+제대로 | [제대로] 해 주세요. | Hãy làm cho [đàng hoàng]. | Please do it [properly].
+느껴지다 | 봄이 오는 게 [느껴져요]. | Tôi [cảm nhận được] mùa xuân đang đến. | I can [feel] spring coming.
+열심히 | 매일 [열심히] 공부해요. | Ngày nào tôi cũng học [chăm chỉ]. | I study [hard] every day.
+듯 | 꿈을 꾸는 [듯] 행복해요. | Tôi hạnh phúc [như thể] đang mơ. | I'm so happy, [as if] I'm dreaming.
+지키다 | 저는 약속을 [지켜요]. | Tôi [giữ] lời hứa. | I [keep] my promises.
+주 | 다음 [주]에 시험이 있어요. | [Tuần] sau có bài thi. | There's an exam next [week].
+오르다 | 주말에 산에 [올라요]. | Cuối tuần tôi [leo] núi. | I [climb] mountains on weekends.
+지역 | 이 [지역]은 비가 많이 와요. | [Khu vực] này mưa nhiều. | It rains a lot in this [area].
+달다 | 벽에 시계를 [달았어요]. | Tôi đã [treo] đồng hồ lên tường. | I [hung] a clock on the wall.
+아마 | [아마] 내일 비가 올 거예요. | [Có lẽ] mai trời sẽ mưa. | It will [probably] rain tomorrow.
+사라지다 | 고양이가 [사라졌어요]. | Con mèo đã [biến mất]. | The cat [disappeared].
+얻다 | 좋은 정보를 [얻었어요]. | Tôi đã [có được] thông tin hay. | I [got] some good information.
+빼다 | 가방에서 책을 [뺐어요]. | Tôi [lấy] sách ra khỏi cặp. | I [took] the book out of my bag.
+결과 | 시험 [결과]가 나왔어요. | [Kết quả] thi đã có. | The test [results] are out.
+뜻 | 이 단어는 무슨 [뜻]이에요? | Từ này có [nghĩa] là gì? | What's the [meaning] of this word?
+전하다 | 부모님께 안부 [전해] 주세요. | Cho tôi [gửi] lời hỏi thăm bố mẹ bạn nhé. | Please [give] my regards to your parents.
+사랑 | 첫 [사랑]을 기억해요. | Tôi nhớ mối [tình] đầu. | I remember my first [love].
+미안하다 | 늦어서 [미안해요]. | [Xin lỗi] vì tôi đến muộn. | [Sorry] I'm late.
+정부 | [정부]가 새 정책을 발표했어요. | [Chính phủ] đã công bố chính sách mới. | The [government] announced a new policy.
+나쁘다 | 오늘 날씨가 [나빠요]. | Hôm nay thời tiết [xấu]. | The weather is [bad] today.
+어리다 | 동생은 아직 [어려요]. | Em tôi vẫn còn [nhỏ]. | My little brother is still [young].
+가족 | [가족]이 몇 명이에요? | [Gia đình] bạn có mấy người? | How many people are in your [family]?
+나누다 | 빵을 반으로 [나눴어요]. | Tôi [chia] đôi cái bánh. | I [split] the bread in half.
+배우다 | 요즘 한국어를 [배워요]. | Dạo này tôi [học] tiếng Hàn. | I'm [learning] Korean these days.
+반 | 사과 [반] 개를 먹었어요. | Tôi ăn [nửa] quả táo. | I ate [half] an apple.
+떠나다 | 내일 여행을 [떠나요]. | Ngày mai tôi [lên đường] đi du lịch. | I [leave] on a trip tomorrow.
+걷다 | 공원에서 [걸어요]. | Tôi [đi bộ] trong công viên. | I [walk] in the park.
+회사 | 저는 [회사]에 다녀요. | Tôi đi làm ở [công ty]. | I work at a [company].
+무섭다 | 저는 개가 [무서워요]. | Tôi [sợ] chó. | I'm [scared] of dogs.
+꿈 | 제 [꿈]은 가수예요. | [Ước mơ] của tôi là làm ca sĩ. | My [dream] is to be a singer.
+영화 | [영화] 보러 갈래요? | Đi xem [phim] không? | Want to go see a [movie]?
+훨씬 | 오늘이 어제보다 [훨씬] 따뜻해요. | Hôm nay ấm hơn hôm qua [nhiều]. | Today is [much] warmer than yesterday.
+달리다 | 아이들이 운동장에서 [달려요]. | Bọn trẻ đang [chạy] trên sân. | The kids are [running] on the field.
+니 | 사과[니] 배니 과일을 많이 샀어요. | Tôi mua nhiều trái cây, [nào là] táo nào là lê. | I bought lots of fruit: apples, pears, [and so on].
+학생 | 저는 대학교 [학생]이에요. | Tôi là [sinh viên] đại học. | I'm a university [student].
+음식 | 한국 [음식]을 좋아해요. | Tôi thích [món ăn] Hàn Quốc. | I like Korean [food].
+식 | 이런 [식]으로 하세요. | Hãy làm [theo cách] này. | Do it this [way].
+누르다 | 이 버튼을 [누르세요]. | Hãy [bấm] nút này. | [Press] this button.
+너희 | [너희] 집은 어디야? | Nhà [các cậu] ở đâu? | Where's [your] house?
+바람 | [바람]이 많이 불어요. | [Gió] thổi mạnh. | The [wind] is blowing hard.
+듯하다 | 곧 비가 올 [듯해요]. | [Hình như] trời sắp mưa. | It [seems] like it'll rain soon.
+억 | 이 집은 3[억] 원이에요. | Căn nhà này giá 300 [triệu] won. | This house costs 300 [million] won.
+도 | 오늘은 30[도]예요. | Hôm nay 30 [độ]. | It's 30 [degrees] today.
+만큼 | 나도 너[만큼] 키가 커. | Tớ cũng cao [bằng] cậu. | I'm [as] tall as you.
+막다 | 길을 [막지] 마세요. | Đừng [chặn] đường. | Don't [block] the road.
+만약 | [만약] 비가 오면 안 가요. | [Nếu] trời mưa thì tôi không đi. | [If] it rains, I won't go.
+나타나다 | 갑자기 고양이가 [나타났어요]. | Một con mèo bỗng [xuất hiện]. | A cat suddenly [appeared].
+멈추다 | 차가 갑자기 [멈췄어요]. | Xe đột nhiên [dừng lại]. | The car suddenly [stopped].
+어떡하다 | [어떡해요]? 지갑을 잃어버렸어요. | [Làm sao bây giờ]? Tôi làm mất ví rồi. | [What should I do]? I lost my wallet.
+술 | 저는 [술]을 못 마셔요. | Tôi không uống được [rượu]. | I can't drink [alcohol].
+녀석 | 귀여운 [녀석]이네. | [Nhóc] này dễ thương ghê. | What a cute little [guy].
+꽤 | 이 식당 [꽤] 맛있어요. | Quán này [khá] ngon. | This restaurant is [pretty] good.
+바라다 | 행복하길 [바라요]. | Tôi [mong] bạn hạnh phúc. | I [hope] you're happy.
+주변 | 집 [주변]에 공원이 있어요. | [Xung quanh] nhà tôi có công viên. | There's a park [around] my house.
+전부 | [전부] 얼마예요? | [Tất cả] bao nhiêu tiền? | How much is it [altogether]?
+최고 | 이 집 떡볶이가 [최고]예요. | Tteokbokki ở quán này là [nhất]. | This place's tteokbokki is the [best].
+불 | [불] 좀 꺼 주세요. | Tắt [đèn] giúp tôi. | Please turn off the [light].
+이곳 | [이곳]은 도서관이에요. | [Nơi này] là thư viện. | [This place] is a library.
+전혀 | [전혀] 몰랐어요. | Tôi [hoàn toàn] không biết. | I didn't know [at all].
+당시 | 그 [당시]에는 몰랐어요. | [Lúc đó] tôi không biết. | I didn't know [at that time].
+도움 | [도움]이 필요해요. | Tôi cần [sự giúp đỡ]. | I need [help].
+발 | 많이 걸어서 [발]이 아파요. | Đi bộ nhiều nên tôi đau [chân]. | My [feet] hurt from walking a lot.
+그림 | 동생이 [그림]을 그려요. | Em tôi đang vẽ [tranh]. | My little sister is drawing a [picture].
+잇다 | 두 끈을 [이었어요]. | Tôi [nối] hai sợi dây lại. | I [tied] the two strings together.
+어린이 | [어린이]날은 5월 5일이에요. | Ngày [Thiếu nhi] là ngày 5 tháng 5. | [Children]'s Day is May 5th.
+팀 | 우리 [팀]이 이겼어요. | [Đội] chúng tôi đã thắng. | Our [team] won.
+다리 | 오래 서 있어서 [다리]가 아파요. | Đứng lâu nên tôi mỏi [chân]. | My [legs] hurt from standing a long time.
+비 | 밖에 [비]가 와요. | Bên ngoài trời đang [mưa]. | It's [raining] outside.
+질문 | [질문]이 있어요. | Tôi có [câu hỏi]. | I have a [question].
+걸다 | 벽에 사진을 [걸었어요]. | Tôi đã [treo] ảnh lên tường. | I [hung] a photo on the wall.
+편하다 | 이 신발은 [편해요]. | Đôi giày này [thoải mái]. | These shoes are [comfortable].
+어머니 | [어머니]는 선생님이세요. | [Mẹ] tôi là giáo viên. | My [mother] is a teacher.
+아래 | 책상 [아래]에 고양이가 있어요. | [Dưới] bàn có con mèo. | There's a cat [under] the desk.
+가격 | [가격]이 얼마예요? | [Giá] bao nhiêu? | What's the [price]?
+대신 | 커피 [대신] 차를 마셔요. | Tôi uống trà [thay vì] cà phê. | I drink tea [instead of] coffee.
+약 | 집에서 학교까지 [약] 10분 걸려요. | Từ nhà đến trường mất [khoảng] 10 phút. | It takes [about] 10 minutes from home to school.
+안녕 | [안녕], 잘 가! | [Tạm biệt], đi cẩn thận nhé! | [Bye], take care!
+나라 | 어느 [나라] 사람이에요? | Bạn là người [nước] nào? | Which [country] are you from?
+님 | 사장[님], 안녕하세요. | Chào [ông] chủ ạ. | Hello, [sir].
+놀다 | 주말에 친구랑 [놀아요]. | Cuối tuần tôi [đi chơi] với bạn. | I [hang out] with friends on weekends.
+보통 | 주말에는 [보통] 집에 있어요. | Cuối tuần tôi [thường] ở nhà. | I [usually] stay home on weekends.

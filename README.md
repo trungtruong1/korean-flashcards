@@ -1,6 +1,6 @@
 # 고래 단어장 · Gorae Words
 
-Flashcards for the **7,000 most common Korean words**, with **Vietnamese** and **English** meanings and an example sentence for each word. The words come in 140 sets of 50, from most to least common.
+Flashcards for the **7,000 most common Korean words**, with **Vietnamese** and **English** meanings and a short example sentence for each word, translated into both languages. The words come in 140 sets of 50, from most to least common.
 
 **Live site:** https://trungtruong1.github.io/korean-flashcards/
 
@@ -10,10 +10,35 @@ Flashcards for the **7,000 most common Korean words**, with **Vietnamese** and *
 - **Swipe right** (or press →) when you know the word, and **swipe left** (←) when you don't yet.
 - Made a mistake? Press **undo** (↶ or `Z`).
 - Opening a set again shows only the words you haven't marked "got it". The end screen lets you review the "not yet" words or redo the whole set.
-- The 🔊 buttons read the word or example aloud using your device's Korean voice.
-- In **Settings** you can show the meaning on the front instead, put English first, turn romanization off, turn on auto-play or shuffle, and switch between light and dark themes.
-- Progress is saved in your browser. Use **Settings → Export backup / Import backup** to move it to another device.
+- The 🔊 buttons read the word or example aloud using your device's Korean voice. The copy buttons copy the word or the example sentence.
+- **Search** (on the home page, or press `/`) finds words in Korean, Vietnamese (with or without accents) or English. Tap a result to see the full card and mark it.
+- Under each word is a **pronunciation guide in Vietnamese letters** with Seoul pitch shown as tone marks, e.g. 보다 → *bồ đa*, 사다 → *xa đa*. **Settings → How to read it** explains the marks.
+- In **Settings** you can show the meaning on the front instead, put English first, hide the pronunciation guide, turn on auto-play or shuffle, and switch between light and dark themes.
+- Progress is saved in your browser. Sign in (once accounts are turned on, see below) to keep it in your account across devices, or use **Settings → Export backup / Import backup**.
 - On a phone, "Add to Home Screen" makes it work like an app.
+
+## Turn on accounts (sign-in + sync)
+
+Sign-in uses [Firebase](https://firebase.google.com) (free Spark plan). Until it's set up, the site works without accounts.
+
+1. Go to https://console.firebase.google.com → **Add project** (Google Analytics not needed).
+2. **Build → Authentication → Get started**, then enable **Google** and **Email/Password**.
+3. **Authentication → Settings → Authorized domains → Add domain**: `trungtruong1.github.io`.
+4. **Build → Firestore Database → Create database** (production mode, any location). In the **Rules** tab, paste the contents of [`firestore.rules`](firestore.rules) and **Publish**.
+5. **Project settings (⚙) → Your apps → Web (`</>`)** → register an app → copy the `firebaseConfig` values into [`js/firebase-config.js`](js/firebase-config.js):
+
+   ```js
+   window.GORAE_FIREBASE = {
+     apiKey: "…",
+     authDomain: "your-project.firebaseapp.com",
+     projectId: "your-project",
+     appId: "…",
+   };
+   ```
+
+6. Commit and push. A person icon appears next to Settings.
+
+The config values aren't secret. The Firestore rules make sure each person can read and write only their own progress (`users/{uid}`). When you sign in on a device for the first time, what you studied there is merged into your account.
 
 ## Run it on your computer
 
@@ -29,11 +54,12 @@ python -m http.server 8000
 | What | Source | License |
 |---|---|---|
 | Word ranking | [Kimchi Reader frequency list](https://kimchi-reader.app/explore/freq/words), based on Korean YouTube videos, TV shows and books | used with credit |
-| Meanings (EN + VI), examples, hanja, pronunciation, level | [한국어기초사전 (Korean Learners' Dictionary)](https://krdict.korean.go.kr), National Institute of Korean Language, via the [krdict-converted](https://github.com/changwoo/krdict-converted) dump | [CC BY-SA 2.0 KR](https://creativecommons.org/licenses/by-sa/2.0/kr/) |
+| Meanings (EN + VI), hanja, pronunciation, level | [한국어기초사전 (Korean Learners' Dictionary)](https://krdict.korean.go.kr), National Institute of Korean Language, via the [krdict-converted](https://github.com/changwoo/krdict-converted) dump | [CC BY-SA 2.0 KR](https://creativecommons.org/licenses/by-sa/2.0/kr/) |
 | Homonym ordering | NIKL 한국어 학습용 어휘 목록 (2003) | — |
-| 368 words missing from the dictionary (new loanwords and slang like 맛집, 알바, 헐) | Written by AI (Claude), marked **AI** in the app | — |
+| Example sentences and their Vietnamese + English translations | Written by AI (Claude) to be short and beginner-friendly | — |
+| 381 words missing from the dictionary or its intended sense (new loanwords and slang like 맛집, 알바, 헐) | Written by AI (Claude), marked **AI** in the app | — |
 
-Proper nouns (cities, people, brands), tokenizer fragments, swear words and narrow jargon (game, makeup and fantasy-novel terms) were skipped. That's why the 7,000 cards cover frequency ranks 1–7,176.
+Proper nouns (cities, people, brands), tokenizer fragments, swear words and narrow jargon (game, makeup and fantasy-novel terms) were skipped. That's why the 7,000 cards cover frequency ranks 1–7,178.
 
 Because the dictionary data is CC BY-SA, the word files in `data/` are shared under **CC BY-SA 2.0 KR** too.
 
@@ -53,24 +79,35 @@ python scripts/build_data.py --krdict sources/krdict.json --nikl sources/nikl.js
   --freq sources/freq --extras scripts/extras.json --out data
 ```
 
-`scripts/extras.json` holds the hand-made parts:
+`scripts/examples/*.txt` hold the example sentences, one per line:
+
+```
+word | Korean with [word] | Vietnamese with [word] | English with [word]
+```
+
+The `[brackets]` mark the word to highlight. The build checks that every line has exactly one highlight per language and warns about cards without an example.
+
+`scripts/extras.json` holds the other hand-made parts:
 
 - the AI-written entries
 - the skip list
 - `_prefer`, which picks the right homonym, e.g. 예 = "yes", not "old times"
-- `_en` / `_vi`, which hold shorter glosses
-- `_examples`, which holds examples for words the dictionary has none for
+- `_en` / `_vi`, which hold shorter or corrected glosses
 
 Progress is stored per set and word, so if a rebuild moves words to different sets, progress for those words resets.
 
 ## Files
 
 ```
-index.html            page shell
-css/style.css         mint & sky-blue theme (light + dark)
-js/app.js             sets, swipe cards, progress, settings
-js/romanize.js        Revised Romanization
-data/meta.json        set count and first word of each set
-data/sets/NNN.json    50 words per set
-scripts/              data pipeline
+index.html               page shell
+css/style.css            mint & sky-blue theme (light + dark)
+js/app.js                sets, swipe cards, search, progress, settings
+js/pronounce.js          pronunciation guide in Vietnamese letters with Seoul pitch
+js/sync.js               optional sign-in and cloud sync (Firebase)
+js/firebase-config.js    Firebase settings (empty = accounts off)
+firestore.rules          Firestore security rules for synced progress
+data/meta.json           set count and first word of each set
+data/sets/NNN.json       50 words per set
+data/search.json         search index
+scripts/                 data pipeline and example sentences
 ```
