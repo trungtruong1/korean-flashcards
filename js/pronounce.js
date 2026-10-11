@@ -94,51 +94,28 @@
     return s;
   }
 
-  // ㅓ is an open "o" (like Vietnamese o), ㅗ a rounded "ô".
+  // Letters follow the charts the user picked.
+  // Vowels: ㅏa ㅑya ㅓo ㅕyo ㅗô ㅛyô ㅜu ㅠyu ㅡư ㅣi ㅐe ㅒye ㅔê ㅖyê ㅘoa ㅙoe ㅚuê ㅝuo ㅞuê ㅟuy ㅢưi
+  //   (ㅓ is an open "o" like Vietnamese o, ㅗ a rounded "ô").
+  // Consonants: ㄱk ㄴn ㄷt ㄹr/l ㅁm ㅂp ㅅs ㅇng ㅈj ㅊch ㅋkh ㅌth ㅍph ㅎh ㄲkk ㄸtt ㅃpp ㅆss ㅉjj
+  //   (plain, aspirated and tense consonants stay apart: k/kh/kk, t/th/tt, p/ph/pp, j/ch/jj, s/ss).
   var VOWEL = ["a", "e", "ya", "ye", "o", "ê", "yo", "yê", "ô", "oa", "oe", "uê", "yô", "u", "uo", "uê", "uy", "yu", "ư", "ưi", "i"];
+  var JAMO_V = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
+  // Initial consonant letters, in jamo order ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ (ㄹ handled separately).
+  var INITIAL = ["k", "kk", "n", "t", "tt", "r", "m", "p", "pp", "s", "ss", "", "j", "jj", "ch", "kh", "th", "ph", "h"];
   // Which letter of the vowel carries the tone mark.
   var MAIN = { "ưi": 0 };
-  var FINAL = {}; FINAL[F_G] = "c"; FINAL[F_N] = "n"; FINAL[F_D] = "t"; FINAL[F_L] = "l"; FINAL[F_M] = "m"; FINAL[F_B] = "p"; FINAL[F_NG] = "ng";
+  var FINAL = {}; FINAL[F_G] = "k"; FINAL[F_N] = "n"; FINAL[F_D] = "t"; FINAL[F_L] = "l"; FINAL[F_M] = "m"; FINAL[F_B] = "p"; FINAL[F_NG] = "ng";
 
-  // ㄷ is voiced (đ) between voiced sounds, plain (t) elsewhere. ㄱ stays c/k:
-  // Vietnamese g is a fricative, further from Korean than c.
-  function voiced(first, prevFinal) {
-    return !first && (!prevFinal || prevFinal === F_N || prevFinal === F_L || prevFinal === F_M || prevFinal === F_NG);
-  }
-
-  function initial(i, first, prevFinal) {
-    switch (i) {
-      case G: return "c";
-      case GG: return "kk";
-      case N: return "n";
-      case D: return voiced(first, prevFinal) ? "đ" : "t";
-      case DD: return "tt";
-      case R: return prevFinal === F_L ? "l" : "r";
-      case M: return "m";
-      case B: return "b";
-      case BB: return "pp";
-      case S: return "x";
-      case SS: return "ss";
-      case NG: return "";
-      case J: return "ch";
-      case JJ: return "jj";
-      case CH: return "ch";
-      case K: return "kh";
-      case T: return "th";
-      case P: return "p";
-      case H: return "h";
-    }
-    return "";
+  function initial(i, prevFinal) {
+    if (i === R && prevFinal === F_L) return "l"; // ㄹㄹ → l l
+    return INITIAL[i];
   }
 
   function syllable(ini, vowel, fin, low) {
-    // Vietnamese spelling: c → k before i/e/ê/y, c + w-vowel → qu.
-    if (ini === "c" && /^[ieêy]/.test(vowel)) ini = "k";
-    else if (ini === "c" && /^(oa|oe|uo|uê|uy)$/.test(vowel)) { ini = "q"; vowel = "u" + vowel.slice(1); }
     var end = FINAL[fin] || "";
-    if (end === "c" && /[ieê]$/.test(vowel)) end = "k";
-    var stop = /^[ptck]$/.test(end);
-    var mark = low ? (stop ? "̣" : "̀") : (stop ? "́" : "");
+    var stop = /^[ptk]$/.test(end);
+    var mark = low ? (stop ? "\u0323" : "\u0300") : (stop ? "\u0301" : "");
     var at = MAIN[vowel] !== undefined ? MAIN[vowel] : vowel.length - 1;
     var v = vowel.slice(0, at + 1) + mark + vowel.slice(at + 1);
     return (ini + v + end).normalize("NFC");
@@ -163,12 +140,20 @@
       var low = pitches(s.length, HIGH_START.indexOf(s[0].i) >= 0);
       var prev = 0;
       return s.map(function (x, k) {
-        var out = syllable(initial(x.i, k === 0, prev), VOWEL[x.m], x.f, low[k]);
+        var out = syllable(initial(x.i, prev), VOWEL[x.m], x.f, low[k]);
         prev = x.f;
         return out;
       }).join(" ");
     }).join(" · ");
   }
+
+  // The letter chart, for the help screen: [[jamo, letters], ...]
+  var CONS = "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄲㄸㅃㅆㅉ";
+  var CONS_VI = ["k", "n", "t", "r, l", "m", "p", "s", "ng", "j", "ch", "kh", "th", "ph", "h", "kk", "tt", "pp", "ss", "jj"];
+  viPron.chart = {
+    vowels: "ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅒㅔㅖㅘㅙㅚㅝㅞㅟㅢ".split("").map(function (j) { return [j, VOWEL[JAMO_V.indexOf(j)]]; }),
+    consonants: CONS.split("").map(function (j, k) { return [j, CONS_VI[k]]; }),
+  };
 
   window.viPron = viPron;
   if (typeof module !== "undefined") module.exports = viPron;

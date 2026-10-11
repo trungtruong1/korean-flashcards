@@ -484,3 +484,7 @@ details.defs p { margin: 6px 0 0; line-height: 1.45; }
 .guide-table { border-collapse: collapse; margin: 4px 0 10px; font-size: 15px; }
 .guide-table td { padding: 4px 14px 4px 0; }
 .guide-table td:first-child { font-family: var(--font-ko); }
+.jamo-chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 6px; margin: 0 0 10px; }
+.jamo-chart div { display: grid; justify-items: center; gap: 2px; padding: 6px 2px; border-radius: 12px; background: var(--surface-2); border: 1.5px solid var(--line); }
+.jamo-chart .j { font-family: var(--font-ko); font-size: 20px; line-height: 1.1; }
+.jamo-chart .v { font-size: 13px; font-weight: 800; color: var(--mint-strong); white-space: nowrap; }

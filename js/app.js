@@ -844,7 +844,7 @@
       "<h3>Cards</h3>" +
       '<div class="opt"><div>Card front<small>What you see before flipping</small></div>' + seg("front", [["ko", "한국어"], ["meaning", "Meaning"]]) + "</div>" +
       '<div class="opt"><div>Meaning order</div>' + seg("viFirst", [["true", "Tiếng Việt"], ["false", "English"]]) + "</div>" +
-      '<div class="opt"><div>Pronunciation guide<small>In Vietnamese letters with Seoul pitch: 보다 → bồ đa · <button class="link-btn" data-act="guide-help">How to read it</button></small></div>' + sw("roman") + "</div>" +
+      '<div class="opt"><div>Pronunciation guide<small>In Vietnamese letters with Seoul pitch: 보다 → ' + esc(window.viPron(null, "보다")) + ' · <button class="link-btn" data-act="guide-help">How to read it</button></small></div>' + sw("roman") + "</div>" +
       '<div class="opt"><div>Shuffle cards<small>Applies when you open a set</small></div>' + sw("shuffle") + "</div>" +
       "<h3>Audio</h3>" +
       '<div class="opt"><div>Word audio<small>Real voice: native speakers recorded by the Korean dictionary (' + fmt(meta && meta.audio || 6000) + " words)</small></div>" +
@@ -895,6 +895,12 @@
     );
   }
 
+  function jamoChart(pairs) {
+    return '<div class="jamo-chart">' + pairs.map(function (p) {
+      return '<div><span class="j" lang="ko">' + p[0] + '</span><span class="v" lang="vi">' + esc(p[1]) + "</span></div>";
+    }).join("") + "</div>";
+  }
+
   function openGuideHelp() {
     var ex = function (w, pr) { return '<tr><td lang="ko">' + w + '</td><td lang="vi"><b>' + esc(window.viPron(pr, w)) + "</b></td></tr>"; };
     openModal(
@@ -902,14 +908,14 @@
       "<p>Each word is written with Vietnamese letters the way Seoul speakers actually say it, including sound changes (있다 sounds like 읻따, 한국어 like 한구거).</p>" +
       "<h3>Pitch (the tone marks)</h3>" +
       "<p>Korean has no word tones, but Seoul speech has a melody. Words starting with <b>ㅋ ㅌ ㅍ ㅊ, ㄲ ㄸ ㅃ ㅆ ㅉ, ㅅ or ㅎ</b> start high; all other words start low and then rise.</p>" +
-      "<p><b>Dấu huyền / dấu nặng</b> (bồ, ịt) = say it lower. <b>No mark / dấu sắc</b> (đa, hác) = higher, level. In longer words the second-to-last syllable dips again.</p>" +
+      "<p><b>Dấu huyền / dấu nặng</b> (pồ, ịt) = say it lower. <b>No mark / dấu sắc</b> (ta, hák) = higher, level. In longer words the second-to-last syllable dips again.</p>" +
       '<table class="guide-table">' + ex("보다") + ex("사다") + ex("있다", "읻따") + ex("감사합니다", "감사함니다") + ex("고마워요") + "</table>" +
-      "<h3>Letters</h3>" +
-      "<p><b>kk, tt, pp, ss, jj</b> = tense consonants (ㄲ ㄸ ㅃ ㅆ ㅉ): tighten your throat, no puff of air. " +
-      "<b>kh, th, p, ch</b> = ㅋ ㅌ ㅍ ㅊ with a strong puff of air. " +
-      "<b>c/k, t, b, ch</b> = ㄱ ㄷ ㅂ ㅈ (soft, little air); between vowels ㄷ softens to <b>đ</b>. " +
-      "<b>o</b> = ㅓ (open, like Vietnamese o), <b>ô</b> = ㅗ (rounded), <b>ư</b> = ㅡ, <b>e</b> = ㅐ, <b>ê</b> = ㅔ (in Seoul these two sound almost the same), " +
-      "<b>x</b> = ㅅ, <b>r</b> = ㄹ between vowels (a light tap), <b>l</b> = ㄹ at the end.</p>" +
+      "<h3>Vowels · Nguyên âm</h3>" + jamoChart(window.viPron.chart.vowels) +
+      "<p><b>o</b> = ㅓ (open, like Vietnamese o), <b>ô</b> = ㅗ (rounded). ㅐ <b>e</b> and ㅔ <b>ê</b> sound almost the same in Seoul.</p>" +
+      "<h3>Consonants · Phụ âm</h3>" + jamoChart(window.viPron.chart.consonants) +
+      "<p>Each consonant has three versions: plain <b>k t p j s</b> (soft, a little air), " +
+      "aspirated <b>kh th ph ch</b> (ㅋ ㅌ ㅍ ㅊ, a strong puff of air) and tense <b>kk tt pp jj ss</b> (ㄲ ㄸ ㅃ ㅉ ㅆ, tighten your throat, no air). " +
+      "ㄹ is <b>r</b> between vowels (a light tap) and <b>l</b> at the end of a syllable. Final consonants are written <b>k t p n l m ng</b>.</p>" +
       "<p>It's a guide, not a replacement for listening: tap the speaker to hear a recording of a native speaker.</p>"
     );
   }
