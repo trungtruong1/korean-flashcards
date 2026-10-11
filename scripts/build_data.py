@@ -11,6 +11,9 @@ import argparse, collections, glob, json, os, re
 
 TOTAL = 7000
 SET_SIZE = 50
+# krdict recordings live under this path on dicmedia.korean.go.kr; the app adds
+# the https host back.
+SOUND_PREFIX = "/multimedia/"
 
 POS_EN = {
     "명사": "noun", "동사": "verb", "형용사": "adjective", "부사": "adverb",
@@ -334,9 +337,15 @@ def main():
         elif word in extras:
             p, en, vi, x = extras[word]
             card = {"r": w["rank"], "w": key, "ai": 1, "m": [{"p": p, "en": en, "vi": vi, "x": x}]}
+            first = None
         else:
             (skipped if word in skip else unknown).append(w)
             continue
+        # Recording by a native speaker (krdict). AI cards borrow one from a
+        # dictionary entry spelled the same way.
+        sound = (first or {}).get("sound") or next((e["sound"] for e in by.get(key, []) if e.get("sound")), None)
+        if sound and SOUND_PREFIX in sound:
+            card["au"] = sound.split(SOUND_PREFIX, 1)[1]
         seen.add(key)
         cards.append(card)
 
@@ -374,6 +383,7 @@ def main():
         "total": len(cards), "setSize": SET_SIZE, "sets": nsets,
         "firstWords": [cards[i * SET_SIZE]["w"] for i in range(nsets)],
         "maxRank": cards[-1]["r"] if cards else 0,
+        "audio": sum(1 for c in cards if c.get("au")),
     }
     with open(os.path.join(a.out, "meta.json"), "w", encoding="utf-8") as fh:
         json.dump(meta, fh, ensure_ascii=False, separators=(",", ":"))

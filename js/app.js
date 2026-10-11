@@ -3,7 +3,7 @@
 
   var STORE_KEY = "gorae-words:v1";
   var LEVELS = { 1: "Beginner", 2: "Intermediate", 3: "Advanced" };
-  var DEFAULT_SETTINGS = { front: "ko", roman: true, autoplay: false, shuffle: false, viFirst: true, theme: "auto" };
+  var DEFAULT_SETTINGS = { front: "ko", roman: true, autoplay: false, shuffle: false, viFirst: true, theme: "auto", rec: true, voice: "", rate: "0.85" };
 
   var app = document.getElementById("app");
   var toastEl = document.getElementById("toast");
@@ -202,19 +202,24 @@
 
   // ---------- Speech ----------
   var koVoice = null, voicesLoaded = false, voiceWarned = false;
+  function koreanVoices() {
+    if (!("speechSynthesis" in window)) return [];
+    return window.speechSynthesis.getVoices().filter(function (v) { return /^ko/i.test(v.lang); });
+  }
   function pickVoice() {
     if (!("speechSynthesis" in window)) return;
-    var vs = window.speechSynthesis.getVoices();
-    if (!vs.length) return;
+    if (!window.speechSynthesis.getVoices().length) return;
     voicesLoaded = true;
-    var ko = vs.filter(function (v) { return /^ko/i.test(v.lang); });
-    koVoice = ko.filter(function (v) { return /natural|online|google|premium|enhanced/i.test(v.name); })[0] || ko[0] || null;
+    var ko = koreanVoices();
+    var chosen = ko.filter(function (v) { return v.name === store.settings.voice; })[0];
+    koVoice = chosen || ko.filter(function (v) { return /natural|online|google|premium|enhanced/i.test(v.name); })[0] || ko[0] || null;
   }
   if ("speechSynthesis" in window) {
     pickVoice();
     window.speechSynthesis.onvoiceschanged = pickVoice;
   }
   function say(text) {
+    stopAudio();
     if (!("speechSynthesis" in window)) { toast("Audio isn't supported in this browser"); return; }
     pickVoice();
     var synth = window.speechSynthesis;
@@ -222,12 +227,38 @@
     var u = new SpeechSynthesisUtterance(text);
     u.lang = "ko-KR";
     if (koVoice) u.voice = koVoice;
-    u.rate = 0.85;
+    u.rate = parseFloat(store.settings.rate) || 0.85;
     synth.speak(u);
     if (voicesLoaded && !koVoice && !voiceWarned) {
       voiceWarned = true;
       toast("No Korean voice on this device — add one in your system's speech settings");
     }
+  }
+
+  // Recordings by native speakers from the Korean Learners' Dictionary (NIKL),
+  // streamed from its media server. Falls back to the device voice.
+  var REC_BASE = "https://dicmedia.korean.go.kr/multimedia/";
+  var player = null;
+  function stopAudio() { if (player) { player.pause(); player = null; } }
+  function playRecording(path, text) {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    stopAudio();
+    var a = player = new Audio(REC_BASE + path);
+    var fell = false;
+    var fallback = function () { if (!fell && player === a) { fell = true; player = null; say(text); } };
+    a.addEventListener("error", fallback);
+    var p = a.play();
+    if (p && p.catch) p.catch(function (e) { if (e && e.name !== "AbortError") fallback(); });
+  }
+  // Say a card's word: the recording when there is one (and it's turned on).
+  function sayWord(c) {
+    if (c.au && store.settings.rec) playRecording(c.au, c.w);
+    else say(c.w);
+  }
+  function wordSpeakBtn(c, cls) {
+    var rec = c.au && store.settings.rec;
+    return '<button class="speak' + (cls || "") + '" data-say="' + esc(c.w) + '"' + (c.au ? ' data-au="' + esc(c.au) + '"' : "") +
+      ' aria-label="' + (rec ? "Play recording by a native speaker" : "Play pronunciation") + '" title="' + (rec ? "Native speaker recording" : "Device voice") + '">' + icon.sound + "</button>";
   }
 
   // ---------- Router ----------
@@ -538,7 +569,7 @@
     deckEl.innerHTML = (nxt ? cardHtml(nxt, "next") : "") + cardHtml(cur, "current" + (first ? "" : " enter"));
     attachDrag(deckEl.querySelector(".card.current"));
     updateRound();
-    if (store.settings.autoplay) say(cur.c.w);
+    if (store.settings.autoplay) sayWord(cur.c);
   }
 
   function firstLang(m) { return store.settings.viFirst ? m.vi : m.en; }
@@ -561,7 +592,7 @@
     } else {
       front = '<div class="word' + (c.w.length > 4 ? " long" : "") + '" lang="ko">' + esc(c.w) + "</div>" +
         (st.roman ? '<div class="guide" lang="vi" title="Pronunciation in Vietnamese letters">' + esc(guide(c)) + "</div>" : "") +
-        '<div class="front-btns"><button class="speak" data-say="' + esc(c.w) + '" aria-label="Play pronunciation">' + icon.sound + "</button>" +
+        '<div class="front-btns">' + wordSpeakBtn(c) +
         '<button class="speak copy" data-copy="' + esc(c.w) + '" aria-label="Copy word">' + icon.copy + "</button></div>";
     }
     return '<div class="card ' + cls + '">' +
@@ -604,7 +635,7 @@
     return '<div class="back-head"><div class="bh-text"><span class="w" lang="ko">' + esc(c.w) + "</span>" +
       (sub ? '<div class="bh-sub">' + sub + "</div>" : "") + "</div>" +
       '<button class="speak sm copy" data-copy="' + esc(c.w) + '" aria-label="Copy word">' + icon.copy + "</button>" +
-      '<button class="speak" data-say="' + esc(c.w) + '" aria-label="Play pronunciation">' + icon.sound + "</button></div>" +
+      wordSpeakBtn(c) + "</div>" +
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
       '<div class="mean">' + langLines(m0) + "</div>" + defs + ex +
       (alts ? '<div class="also"><span class="lbl">ALSO MEANS</span>' + alts + "</div>" : "") +
@@ -814,8 +845,13 @@
       '<div class="opt"><div>Card front<small>What you see before flipping</small></div>' + seg("front", [["ko", "한국어"], ["meaning", "Meaning"]]) + "</div>" +
       '<div class="opt"><div>Meaning order</div>' + seg("viFirst", [["true", "Tiếng Việt"], ["false", "English"]]) + "</div>" +
       '<div class="opt"><div>Pronunciation guide<small>In Vietnamese letters with Seoul pitch: 보다 → bồ đa · <button class="link-btn" data-act="guide-help">How to read it</button></small></div>' + sw("roman") + "</div>" +
-      '<div class="opt"><div>Auto-play audio<small>Say each word when it appears</small></div>' + sw("autoplay") + "</div>" +
       '<div class="opt"><div>Shuffle cards<small>Applies when you open a set</small></div>' + sw("shuffle") + "</div>" +
+      "<h3>Audio</h3>" +
+      '<div class="opt"><div>Word audio<small>Real voice: native speakers recorded by the Korean dictionary (' + fmt(meta && meta.audio || 6000) + " words)</small></div>" +
+      seg("rec", [["true", "Real voice"], ["false", "Device"]]) + "</div>" +
+      '<div class="opt"><div>Auto-play audio<small>Say each word when it appears</small></div>' + sw("autoplay") + "</div>" +
+      voiceOption() +
+      '<div class="opt"><div>Voice speed<small>Device voice</small></div>' + seg("rate", [["0.7", "Slow"], ["0.85", "Normal"], ["1", "Fast"]]) + "</div>" +
       "<h3>Look</h3>" +
       '<div class="opt"><div>Theme</div>' + seg("theme", [["auto", "Auto"], ["light", "Light"], ["dark", "Dark"]]) + "</div>" +
       "<h3>Progress</h3>" +
@@ -826,6 +862,18 @@
       '<input type="file" accept="application/json,.json" id="importFile" hidden>' +
       '<h3>About</h3><p><button class="btn small ghost" data-act="about">About &amp; credits</button></p>'
     );
+  }
+
+  function voiceOption() {
+    var ko = koreanVoices();
+    var cur = koVoice ? koVoice.name : "";
+    var opts = ko.length
+      ? '<option value="">Best available' + (cur && !store.settings.voice ? " (" + esc(cur) + ")" : "") + "</option>" +
+        ko.map(function (v) { return '<option value="' + esc(v.name) + '"' + (v.name === store.settings.voice ? " selected" : "") + ">" + esc(v.name) + "</option>"; }).join("")
+      : '<option value="">No Korean voice found</option>';
+    return '<div class="opt opt-col"><div>Device voice<small>Reads example sentences. Most natural: “SunHi/InJoon Online (Natural)” in Edge, “Google 한국의” in Chrome, “Yuna (Enhanced)” on iPhone (Settings → Accessibility → Spoken Content → Voices).</small></div>' +
+      '<div class="voice-row"><select id="voiceSel" aria-label="Device voice">' + opts + "</select>" +
+      '<button class="btn small" data-act="test-voice">' + icon.sound + "Test</button></div></div>";
   }
 
   function openAbout() {
@@ -843,7 +891,7 @@
       "<p><b>Example sentences</b> and their Vietnamese and English translations were written by AI (Claude) to keep them short and beginner-friendly. They may contain small mistakes.</p>" +
       "<p><b>AI-written cards:</b> a few hundred common words (new loanwords and slang like 맛집, 알바, 헐) aren't in the dictionary. Their meanings were written by AI and are marked <span class=\"chip ai\">AI</span>.</p>" +
       "<p><b>Pronunciation guide:</b> generated from the dictionary's pronunciations. <button class=\"link-btn\" data-act=\"guide-help\">How to read it</button></p>" +
-      "<p><b>Audio</b> uses your device's built-in Korean voice.</p>"
+      "<p><b>Audio:</b> words play recordings by native speakers from the same dictionary, streamed from its server (dicmedia.korean.go.kr). Example sentences, and words without a recording, use your device's Korean voice.</p>"
     );
   }
 
@@ -859,9 +907,10 @@
       "<h3>Letters</h3>" +
       "<p><b>kk, tt, pp, ss, jj</b> = tense consonants (ㄲ ㄸ ㅃ ㅆ ㅉ): tighten your throat, no puff of air. " +
       "<b>kh, th, p, ch</b> = ㅋ ㅌ ㅍ ㅊ with a strong puff of air. " +
-      "<b>c/k, t, b, ch</b> = ㄱ ㄷ ㅂ ㅈ at the start of a word; between vowels they soften to <b>g, đ, b</b>. " +
-      "<b>ơ</b> = ㅓ, <b>ư</b> = ㅡ, <b>ô</b> = ㅗ, <b>x</b> = ㅅ, <b>r</b> = ㄹ between vowels (a light tap), <b>l</b> = ㄹ at the end.</p>" +
-      "<p>It's a guide, not a replacement for listening: tap the speaker to hear the word.</p>"
+      "<b>c/k, t, b, ch</b> = ㄱ ㄷ ㅂ ㅈ (soft, little air); between vowels ㄷ softens to <b>đ</b>. " +
+      "<b>o</b> = ㅓ (open, like Vietnamese o), <b>ô</b> = ㅗ (rounded), <b>ư</b> = ㅡ, <b>e</b> = ㅐ, <b>ê</b> = ㅔ (in Seoul these two sound almost the same), " +
+      "<b>x</b> = ㅅ, <b>r</b> = ㄹ between vowels (a light tap), <b>l</b> = ㄹ at the end.</p>" +
+      "<p>It's a guide, not a replacement for listening: tap the speaker to hear a recording of a native speaker.</p>"
     );
   }
 
@@ -989,7 +1038,8 @@
     save();
     if (key === "theme") applyTheme();
     // Redraw the open card so front/romanization/order changes show up right away.
-    if (S && document.getElementById("deck") && ["front", "roman", "viFirst"].indexOf(key) >= 0) renderDeck(true);
+    if (S && document.getElementById("deck") && ["front", "roman", "viFirst", "rec"].indexOf(key) >= 0) renderDeck(true);
+    if (key === "voice") pickVoice();
   }
 
   // ---------- Events ----------
@@ -999,7 +1049,11 @@
       if (e.target.classList && e.target.classList.contains("modal-bg")) closeModal();
       return;
     }
-    if (t.dataset.say) { say(t.dataset.say); return; }
+    if (t.dataset.say) {
+      if (t.dataset.au && store.settings.rec) playRecording(t.dataset.au, t.dataset.say);
+      else say(t.dataset.say);
+      return;
+    }
     if (t.dataset.copy) { copyText(t.dataset.copy); return; }
     if (t.dataset.open) { openCard(parseInt(t.dataset.open, 10)); return; }
     if (t.dataset.mark) { markWord(t); return; }
@@ -1029,6 +1083,7 @@
       case "export": exportBackup(); break;
       case "import": document.getElementById("importFile").click(); break;
       case "guide-help": openGuideHelp(); break;
+      case "test-voice": say("안녕하세요. 만나서 반가워요."); break;
       case "account": openAccount(); break;
       case "login-google":
         if (window.goraeSync) window.goraeSync.signInGoogle().catch(function (err) { var m = window.goraeSync.errorText(err); if (m) toast(m); });
@@ -1063,6 +1118,7 @@
     var t = e.target;
     if (t.dataset && t.dataset.switch) changeSetting(t.dataset.switch, t.checked);
     if (t.id === "importFile" && t.files && t.files[0]) importBackup(t.files[0]);
+    if (t.id === "voiceSel") { changeSetting("voice", t.value); say("안녕하세요. 만나서 반가워요."); }
   });
 
   document.addEventListener("input", function (e) {
@@ -1093,7 +1149,7 @@
     else if ((k === " " || k === "Enter") && !onControl) { e.preventDefault(); flip(); }
     else if (k === "ArrowUp" || k === "ArrowDown") { e.preventDefault(); flip(); }
     else if (k === "z" || k === "Z" || k === "Backspace") { e.preventDefault(); undo(); }
-    else if (k === "s" || k === "S") { if (S.deck[S.i]) say(S.deck[S.i].c.w); }
+    else if (k === "s" || k === "S") { if (S.deck[S.i]) sayWord(S.deck[S.i].c); }
   });
 
   route();

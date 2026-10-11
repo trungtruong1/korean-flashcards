@@ -94,19 +94,21 @@
     return s;
   }
 
-  var VOWEL = ["a", "e", "ya", "ye", "ơ", "ê", "yơ", "yê", "ô", "oa", "oe", "uê", "yô", "u", "uơ", "uê", "uy", "yu", "ư", "ưi", "i"];
+  // ㅓ is an open "o" (like Vietnamese o), ㅗ a rounded "ô".
+  var VOWEL = ["a", "e", "ya", "ye", "o", "ê", "yo", "yê", "ô", "oa", "oe", "uê", "yô", "u", "uo", "uê", "uy", "yu", "ư", "ưi", "i"];
   // Which letter of the vowel carries the tone mark.
   var MAIN = { "ưi": 0 };
   var FINAL = {}; FINAL[F_G] = "c"; FINAL[F_N] = "n"; FINAL[F_D] = "t"; FINAL[F_L] = "l"; FINAL[F_M] = "m"; FINAL[F_B] = "p"; FINAL[F_NG] = "ng";
 
-  // ㄱ and ㄷ are voiced (g, đ) between voiced sounds, plain (c, t) elsewhere.
+  // ㄷ is voiced (đ) between voiced sounds, plain (t) elsewhere. ㄱ stays c/k:
+  // Vietnamese g is a fricative, further from Korean than c.
   function voiced(first, prevFinal) {
     return !first && (!prevFinal || prevFinal === F_N || prevFinal === F_L || prevFinal === F_M || prevFinal === F_NG);
   }
 
   function initial(i, first, prevFinal) {
     switch (i) {
-      case G: return voiced(first, prevFinal) ? "g" : "c";
+      case G: return "c";
       case GG: return "kk";
       case N: return "n";
       case D: return voiced(first, prevFinal) ? "đ" : "t";
@@ -130,10 +132,9 @@
   }
 
   function syllable(ini, vowel, fin, low) {
-    // Vietnamese spelling: c → k before i/e/ê/y, g → gh before i/e/ê, c + w-vowel → qu.
+    // Vietnamese spelling: c → k before i/e/ê/y, c + w-vowel → qu.
     if (ini === "c" && /^[ieêy]/.test(vowel)) ini = "k";
-    else if (ini === "g" && /^[ieê]/.test(vowel)) ini = "gh";
-    else if (ini === "c" && /^(oa|oe|uơ|uê|uy)$/.test(vowel)) { ini = "q"; vowel = "u" + vowel.slice(1); }
+    else if (ini === "c" && /^(oa|oe|uo|uê|uy)$/.test(vowel)) { ini = "q"; vowel = "u" + vowel.slice(1); }
     var end = FINAL[fin] || "";
     if (end === "c" && /[ieê]$/.test(vowel)) end = "k";
     var stop = /^[ptck]$/.test(end);

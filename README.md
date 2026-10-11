@@ -10,9 +10,9 @@ Flashcards for the **7,000 most common Korean words**, with **Vietnamese** and *
 - **Swipe right** (or press →) when you know the word, and **swipe left** (←) when you don't yet.
 - Made a mistake? Press **undo** (↶ or `Z`).
 - Opening a set again shows only the words you haven't marked "got it". The end screen lets you review the "not yet" words or redo the whole set.
-- The 🔊 buttons read the word or example aloud using your device's Korean voice. The copy buttons copy the word or the example sentence.
+- The 🔊 button on a word plays a **recording by a native speaker** from the Korean dictionary (6,181 of the 7,000 words). Example sentences and the remaining words use your device's Korean voice; pick the voice and speed in **Settings → Audio**. The copy buttons copy the word or the example sentence.
 - **Search** (on the home page, or press `/`) finds words in Korean, Vietnamese (with or without accents) or English. Tap a result to see the full card and mark it.
-- Under each word is a **pronunciation guide in Vietnamese letters** with Seoul pitch shown as tone marks, e.g. 보다 → *bồ đa*, 사다 → *xa đa*. **Settings → How to read it** explains the marks.
+- Under each word is a **pronunciation guide in Vietnamese letters** with Seoul pitch shown as tone marks, e.g. 보다 → *bồ đa*, 사다 → *xa đa*, 이거 → *ì co* (ㅓ = o, ㅗ = ô). **Settings → How to read it** explains the marks.
 - In **Settings** you can show the meaning on the front instead, put English first, hide the pronunciation guide, turn on auto-play or shuffle, and switch between light and dark themes.
 - Progress is saved in your browser. Sign in (once accounts are turned on, see below) to keep it in your account across devices, or use **Settings → Export backup / Import backup**.
 - On a phone, "Add to Home Screen" makes it work like an app.
@@ -54,7 +54,7 @@ python -m http.server 8000
 | What | Source | License |
 |---|---|---|
 | Word ranking | [Kimchi Reader frequency list](https://kimchi-reader.app/explore/freq/words), based on Korean YouTube videos, TV shows and books | used with credit |
-| Meanings (EN + VI), hanja, pronunciation, level | [한국어기초사전 (Korean Learners' Dictionary)](https://krdict.korean.go.kr), National Institute of Korean Language, via the [krdict-converted](https://github.com/changwoo/krdict-converted) dump | [CC BY-SA 2.0 KR](https://creativecommons.org/licenses/by-sa/2.0/kr/) |
+| Meanings (EN + VI), hanja, pronunciation, level, word recordings (streamed from dicmedia.korean.go.kr) | [한국어기초사전 (Korean Learners' Dictionary)](https://krdict.korean.go.kr), National Institute of Korean Language, via the [krdict-converted](https://github.com/changwoo/krdict-converted) dump | [CC BY-SA 2.0 KR](https://creativecommons.org/licenses/by-sa/2.0/kr/) |
 | Homonym ordering | NIKL 한국어 학습용 어휘 목록 (2003) | — |
 | Example sentences and their Vietnamese + English translations | Written by AI (Claude) to be short and beginner-friendly | — |
 | 381 words missing from the dictionary or its intended sense (new loanwords and slang like 맛집, 알바, 헐) | Written by AI (Claude), marked **AI** in the app | — |

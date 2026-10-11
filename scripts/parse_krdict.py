@@ -43,11 +43,12 @@ for path in sorted(glob.glob(os.path.join(src_dir, "*.xml"))):
         f = feats(el)
         lemma = el.find("Lemma")
         lf = feats(lemma) if lemma is not None else {}
-        pron = None
+        pron = sound = None
         for wf in el.findall("WordForm"):
             w = feats(wf)
             if first(w, "type") == "발음" and w.get("pronunciation"):
                 pron = first(w, "pronunciation")
+                sound = first(w, "sound") or None  # recording by a native speaker
                 break
         senses = []
         for s in el.findall("Sense"):
@@ -72,6 +73,7 @@ for path in sorted(glob.glob(os.path.join(src_dir, "*.xml"))):
             "origin": first(f, "origin"),
             "lvl": first(f, "vocabularyLevel"),
             "pron": pron,
+            "sound": sound,
             "senses": senses,
         })
         el.clear()
