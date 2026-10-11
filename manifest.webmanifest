@@ -1,0 +1,15 @@
+{
+  "name": "Gorae Words · 7,000 Korean flashcards",
+  "short_name": "Gorae Words",
+  "description": "Learn the 7,000 most common Korean words with Vietnamese and English meanings.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#e7f8f2",
+  "theme_color": "#bdeee0",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

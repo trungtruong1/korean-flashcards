@@ -1,0 +1,11 @@
+# Raw source downloads used by scripts/ (large, regenerated on demand)
+sources/
+*.xls
+krdict.json
+nikl.json
+
+__pycache__/
+.venv/
+node_modules/
+.DS_Store
+Thumbs.db
