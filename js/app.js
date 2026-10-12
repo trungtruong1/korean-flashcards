@@ -580,11 +580,11 @@
     document.title = "Set " + S.n + " · Gorae Words";
     app.innerHTML =
       '<section class="study"><header class="study-top">' +
-      '<a class="icon-btn" href="#/" aria-label="Back to all sets">' + icon.back + "</a>" +
+      '<div class="st-side"><a class="icon-btn" href="#/" aria-label="Back to all sets">' + icon.back + "</a></div>" +
       '<div class="title"><b>Set ' + S.n + "</b><small>" + setRange(S.n) + " · " + modeLabel(S.mode) + "</small></div>" +
-      '<button class="icon-btn" data-act="undo" aria-label="Undo last swipe">' + icon.undo + "</button>" +
+      '<div class="st-side end"><button class="icon-btn" data-act="undo" aria-label="Undo last swipe">' + icon.undo + "</button>" +
       '<a class="icon-btn" href="#/set/' + S.n + '/list" aria-label="Word list">' + icon.list + "</a>" +
-      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></header>" +
+      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></div></header>" +
       '<div id="stage">' +
       '<div class="round"><div class="bar"><i class="known" id="bk"></i><i class="learning" id="bl"></i></div>' +
       '<div class="counts"><span class="c-learn">↺ <span id="cl">0</span> not yet</span><span id="cpos"></span><span class="c-know"><span id="ck">0</span> got it ✓</span></div></div>' +
@@ -594,7 +594,7 @@
       '<button class="btn flip" data-act="flip" aria-label="Flip card">' + icon.flip + "</button>" +
       '<button class="btn mint" data-act="know">Got it ' + icon.right + "</button></div>" +
       '<p class="hint">Swipe right if you know it, left if not · tap the card to flip' +
-      '<span class="kbd-hint"> · <span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Space</span> flip <span class="kbd">Z</span> undo</span></p>' +
+      '<span class="kbd-hint"><span class="kbd">←</span> <span class="kbd">→</span> not yet / got it · <span class="kbd">Space</span> flip · <span class="kbd">Z</span> undo</span></p>' +
       "</div></section>";
     renderDeck(true);
   }
