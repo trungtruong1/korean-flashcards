@@ -488,3 +488,55 @@ details.defs p { margin: 6px 0 0; line-height: 1.45; }
 .jamo-chart div { display: grid; justify-items: center; gap: 2px; padding: 6px 2px; border-radius: 12px; background: var(--surface-2); border: 1.5px solid var(--line); }
 .jamo-chart .j { font-family: var(--font-ko); font-size: 20px; line-height: 1.1; }
 .jamo-chart .v { font-size: 13px; font-weight: 800; color: var(--mint-strong); white-space: nowrap; }
+
+/* ---------- Breakdown: how the word is built ---------- */
+details.bd { background: var(--surface); border: 1.5px solid var(--line); border-radius: 18px; padding: 8px 12px; }
+details.bd > summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 8px; }
+details.bd > summary::-webkit-details-marker { display: none; }
+details.bd > summary::after { content: "▾"; margin-left: auto; color: var(--ink-3); font-size: 12px; transition: transform .2s; }
+details.bd:not([open]) > summary::after { transform: rotate(-90deg); }
+details.bd .lbl { font-size: 11px; font-weight: 900; color: var(--ink-3); letter-spacing: .06em; }
+details.bd .bd-word { font-family: var(--font-ko); font-weight: 700; color: var(--teal); }
+.bd-steps { list-style: none; margin: 8px 0 2px; padding: 0; display: grid; gap: 8px; counter-reset: bd; }
+.bd-steps li { display: grid; gap: 3px; padding-left: 26px; position: relative; counter-increment: bd; }
+.bd-steps li::before {
+  content: counter(bd); position: absolute; left: 0; top: 1px; width: 19px; height: 19px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 11px; font-weight: 900; background: var(--mint-soft); color: var(--mint-strong);
+}
+.bd-step { font-family: var(--font-ko); font-size: 16px; line-height: 1.35; }
+.bd-step b { color: var(--teal); }
+.bd-step i { font-style: normal; color: var(--ink-3); margin: 0 6px; }
+.bd-why { display: flex; flex-wrap: wrap; gap: 5px; }
+.g-tag {
+  display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; font-size: 12.5px; font-weight: 800;
+  background: var(--sky-soft); color: var(--sky-strong); text-decoration: none; border: 1.5px solid transparent;
+}
+a.g-tag:hover { border-color: var(--sky); }
+.g-tag.note { background: transparent; border-color: var(--line); color: var(--ink-2); font-family: var(--font-ko); font-weight: 700; }
+.chip.gram { text-decoration: none; background: var(--sky-soft); color: var(--sky-strong); border-color: transparent; }
+.chip.gram svg { width: 13px; height: 13px; }
+
+/* ---------- Grammar page & popup ---------- */
+.g-intro { color: var(--ink-2); font-size: 14px; line-height: 1.5; margin: 0 4px 12px; }
+.seg button small { font-weight: 700; opacity: .7; }
+.g-cat { font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); margin: 20px 6px 8px; }
+.g-list { display: grid; gap: 8px; padding-bottom: 20px; }
+.g-point { background: var(--surface); border-radius: 18px; box-shadow: var(--shadow-sm); scroll-margin-top: 12px; }
+.g-point > summary { list-style: none; cursor: pointer; padding: 12px 14px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.g-point > summary::-webkit-details-marker { display: none; }
+.g-point[open] > summary { border-bottom: 1.5px solid var(--line); }
+.g-point.flash { outline: 3px solid var(--sky); outline-offset: 2px; }
+.gp-ko { font-family: var(--font-ko); font-size: 19px; font-weight: 700; color: var(--teal); }
+.gp-names { font-size: 14px; color: var(--ink-2); }
+.gp-names b { color: var(--ink); }
+.gp-body { padding: 12px 14px 14px; display: grid; gap: 10px; }
+.gp-form { margin: 0; display: grid; gap: 3px; font-size: 15px; line-height: 1.5; background: var(--mint-soft); border-radius: 12px; padding: 8px 12px; }
+.gp-form .lbl { font-size: 11px; font-weight: 900; color: var(--mint-strong); letter-spacing: .06em; }
+.gp-d { margin: 0; font-size: 15px; line-height: 1.55; }
+.gp-d.second { font-size: 13.5px; color: var(--ink-2); }
+.gp-ex { display: grid; gap: 8px; }
+.g-modal h2 { margin-bottom: 8px; }
+.g-modal .gp-title { display: grid; gap: 2px; margin-bottom: 10px; }
+.g-modal .gp-ko { font-size: 24px; }
+.g-modal .gp-form, .g-modal .gp-d, .g-modal .gp-ex { margin-bottom: 10px; }
+.g-modal .row-btns { margin-top: 4px; }

@@ -11,6 +11,8 @@ Flashcards for the **7,000 most common Korean words**, with **Vietnamese** and *
 - Made a mistake? Press **undo** (↶ or `Z`).
 - Opening a set again shows only the words you haven't marked "got it". The end screen lets you review the "not yet" words or redo the whole set.
 - The 🔊 button on a word plays a **recording by a native speaker** from the Korean dictionary (6,181 of the 7,000 words). Example sentences and the remaining words use your device's Korean voice; pick the voice and speed in **Settings → Audio**. The copy buttons copy the word or the example sentence.
+- Under each example, **How it's built** breaks the word down step by step, e.g. 봤어요: 보다 → stem 보 → + 았 (past tense; ㅗ → 아; 보았 → 봤) → + 어요 (polite ending). Tap a step to read about that grammar point.
+- The **Grammar** page (📖 on the home page) explains the 117 grammar points used in the examples, from Beginner to Advanced, in Vietnamese and English with examples.
 - **Search** (on the home page, or press `/`) finds words in Korean, Vietnamese (with or without accents) or English. Tap a result to see the full card and mark it.
 - Under each word is a **pronunciation guide in Vietnamese letters** with Seoul pitch shown as tone marks, e.g. 보다 → *pồ ta*, 사다 → *sa ta*, 이거 → *ì ko* (ㅓ = o, ㅗ = ô; ㄱ k, ㅋ kh, ㄲ kk and so on). **Settings → How to read it** explains the marks.
 - In **Settings** you can show the meaning on the front instead, put English first, hide the pronunciation guide, turn on auto-play or shuffle, and switch between light and dark themes.
@@ -79,6 +81,14 @@ python scripts/build_data.py --krdict sources/krdict.json --nikl sources/nikl.js
   --freq sources/freq --extras scripts/extras.json --out data
 ```
 
+The step-by-step breakdowns come from `scripts/make_breakdowns.py`, which analyzes each example with the [Kiwi](https://github.com/bab2min/kiwipiepy) Korean morphological analyzer (`pip install kiwipiepy`). Run it after editing examples, then rebuild:
+
+```bash
+python scripts/make_breakdowns.py scripts/examples scripts/breakdowns.json
+```
+
+It writes `scripts/breakdowns.json`; the build only uses a breakdown while its example sentence is unchanged. Each step links to a grammar point in `data/grammar.json` (hand-written, with levels, explanations and examples).
+
 `scripts/examples/*.txt` hold the example sentences, one per line:
 
 ```
@@ -101,7 +111,7 @@ Progress is stored per set and word, so if a rebuild moves words to different se
 ```
 index.html               page shell
 css/style.css            mint & sky-blue theme (light + dark)
-js/app.js                sets, swipe cards, search, progress, settings
+js/app.js                sets, swipe cards, breakdowns, grammar page, search, progress, settings
 js/pronounce.js          pronunciation guide in Vietnamese letters with Seoul pitch
 js/sync.js               optional sign-in and cloud sync (Firebase)
 js/firebase-config.js    Firebase settings (empty = accounts off)
@@ -109,5 +119,6 @@ firestore.rules          Firestore security rules for synced progress
 data/meta.json           set count and first word of each set
 data/sets/NNN.json       50 words per set
 data/search.json         search index
-scripts/                 data pipeline and example sentences
+data/grammar.json        grammar page: 117 points, Beginner to Advanced
+scripts/                 data pipeline, example sentences and breakdowns
 ```

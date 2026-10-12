@@ -14,6 +14,17 @@ SET_SIZE = 50
 # krdict recordings live under this path on dicmedia.korean.go.kr; the app adds
 # the https host back.
 SOUND_PREFIX = "/multimedia/"
+# Cards that are themselves grammar (particles, bound nouns, helping verbs) link
+# to their grammar page entry (data/grammar.json).
+WORD_GRAMMAR = {
+    "이다": "copula", "아니다": "anida", "의": "ui", "가": "subj", "을": "obj", "에서": "eseo", "로": "ro",
+    "까지": "buteo", "부터": "buteo", "만큼": "mankeum", "님": "nim", "적": "n-jeok", "번째": "jjae", "뿐": "ppun",
+    "대로": "daero", "마저": "majeo", "수": "l-su", "줄": "l-jul", "때문": "gi-ttaemun", "척": "cheok", "체": "cheok",
+    "뻔": "l-ppeon", "리": "l-ri", "지": "n-ji", "중": "neun-jung", "동안": "neun-dongan", "싶다": "go-sipda",
+    "않다": "ji-anta", "아니하다": "ji-anta", "말다": "ji-mal", "못하다": "ji-motada", "버리다": "a-beorida",
+    "놓다": "a-nota", "두다": "a-nota", "주다": "a-juda", "보다": "a-boda", "되다": "ge-doeda", "하다": "hada",
+    "후": "n-hu", "전": "gi-jeon", "때": "l-ttae",
+}
 
 POS_EN = {
     "명사": "noun", "동사": "verb", "형용사": "adjective", "부사": "adverb",
@@ -270,9 +281,12 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--examples", default=os.path.join(os.path.dirname(__file__), "examples"),
                     help="dir of .txt files with lines 'word | Korean | Vietnamese | English' (highlight in [brackets])")
+    ap.add_argument("--breakdowns", default=os.path.join(os.path.dirname(__file__), "breakdowns.json"),
+                    help="output of make_breakdowns.py (how each example uses its word)")
     ap.add_argument("--report", default=None)
     a = ap.parse_args()
     simple_examples = load_examples(a.examples)
+    breakdowns = json.load(open(a.breakdowns, encoding="utf-8")) if os.path.exists(a.breakdowns) else {}
 
     kd = json.load(open(a.krdict, encoding="utf-8"))
     idx = nikl_index(json.load(open(a.nikl, encoding="utf-8")))
@@ -346,6 +360,8 @@ def main():
         sound = (first or {}).get("sound") or next((e["sound"] for e in by.get(key, []) if e.get("sound")), None)
         if sound and SOUND_PREFIX in sound:
             card["au"] = sound.split(SOUND_PREFIX, 1)[1]
+        if key in WORD_GRAMMAR:
+            card["g"] = WORD_GRAMMAR[key]
         seen.add(key)
         cards.append(card)
 
@@ -361,6 +377,9 @@ def main():
             bad_ex.append(f"{c['w']}: {problem}")
         m0 = c["m"][0]
         m0["x"], m0["xv"], m0["xe"] = ex
+        bd = breakdowns.get(c["w"])
+        if bd and bd[0] == ex[0]:  # computed for this exact sentence
+            m0["bd"] = bd[1:]
     if missing_ex:
         print(f"WARNING: {len(missing_ex)} cards have no simple example, e.g. {missing_ex[:10]}")
     for b in bad_ex:

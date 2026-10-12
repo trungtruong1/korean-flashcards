@@ -9,6 +9,7 @@
   var toastEl = document.getElementById("toast");
 
   var meta = null;
+  var grammar = null; // data/grammar.json, plus byId
   var setCache = {};
   var S = null; // current study session
   var listFilter = "all";
@@ -31,6 +32,7 @@
     copy: svg('<rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15h-.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/>'),
     search: svg('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>'),
     user: svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+    book: svg('<path d="M4 19.5V5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h14"/><path d="M9 7h7M9 11h5"/>'),
   };
 
   var whaleId = 0;
@@ -190,8 +192,18 @@
     });
   }
   function getMeta() {
-    if (meta) return Promise.resolve(meta);
-    return getJSON("data/meta.json").then(function (m) { meta = m; return m; });
+    if (meta && grammar) return Promise.resolve(meta);
+    // The grammar list is small; load it with the word list so breakdowns can name their steps.
+    var g = grammar ? Promise.resolve(grammar) : getJSON("data/grammar.json").then(function (d) {
+      d.byId = {};
+      d.points.forEach(function (p) { d.byId[p.id] = p; });
+      return d;
+    }).catch(function (e) { console.error(e); return null; });
+    return Promise.all([meta ? meta : getJSON("data/meta.json"), g]).then(function (r) {
+      meta = r[0];
+      grammar = r[1];
+      return meta;
+    });
   }
   function getSet(n) {
     if (!setCache[n]) {
@@ -280,6 +292,7 @@
     getMeta().then(function () {
       if (isStale(id)) return;
       var n = parseInt(parts[1], 10);
+      if (parts[0] === "grammar") return renderGrammar(decodeURIComponent(parts[1] || ""));
       if (parts[0] === "set" && n >= 1 && n <= meta.sets) {
         if (parts[2] === "list") return renderList(n, id);
         return startStudy(n, parts[2] || "auto", id);
@@ -328,7 +341,7 @@
     var html =
       '<header class="top"><div class="brand">' + whale() +
       '<div><h1>고래 단어장</h1><p>Gorae Words · ' + fmt(total) + ' most common Korean words</p></div></div>' +
-      '<div class="top-btns">' + accountButton() +
+      '<div class="top-btns"><a class="icon-btn" href="#/grammar" aria-label="Grammar" title="Grammar · Ngữ pháp">' + icon.book + "</a>" + accountButton() +
       '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></div></header>" +
       '<div class="search"><span class="s-icon">' + icon.search + "</span>" +
       '<input id="q" type="search" placeholder="Search 한국어, Tiếng Việt or English" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Search words" value="' + esc(searchQuery) + '">' +
@@ -610,6 +623,7 @@
       m0.p ? '<span class="chip">' + esc(m0.p) + "</span>" : "",
       m0.h ? '<span class="chip hanja" lang="zh-Hant" title="Hanja (Chinese characters)">' + esc(m0.h) + "</span>" : "",
       c.lv ? '<span class="chip lv' + c.lv + '">' + LEVELS[c.lv] + "</span>" : "",
+      c.g && gPoint(c.g) ? '<a class="chip gram" href="#/grammar/' + esc(c.g) + '" data-g="' + esc(c.g) + '">' + icon.book + "Grammar: " + esc(gPoint(c.g).ko) + "</a>" : "",
     ].join("");
     var defs = m0.dv || m0.d
       ? '<details class="defs"><summary>+ Definition</summary>' +
@@ -637,7 +651,7 @@
       '<button class="speak sm copy" data-copy="' + esc(c.w) + '" aria-label="Copy word">' + icon.copy + "</button>" +
       wordSpeakBtn(c) + "</div>" +
       (chips ? '<div class="chips">' + chips + "</div>" : "") +
-      '<div class="mean">' + langLines(m0) + "</div>" + defs + ex +
+      '<div class="mean">' + langLines(m0) + "</div>" + defs + ex + bdHtml(c, m0) +
       (alts ? '<div class="also"><span class="lbl">ALSO MEANS</span>' + alts + "</div>" : "") +
       (c.ai ? '<div class="ai-note">✦ Meaning written by AI, not from the dictionary.</div>' : "");
   }
@@ -813,6 +827,113 @@
     btn.textContent = STATUS[prog[w]] ? STATUS[prog[w]][1] : "New";
   }
 
+  // ---------- Grammar ----------
+  // data/grammar.json: points with id, level, category, Korean title, names,
+  // explanation and examples. Card breakdowns (m.bd) link to them by id.
+  var CAT_ORDER = ["basics", "endings", "particles", "connectors", "patterns", "sound", "suffixes"];
+  var grammarLevel = 1;
+
+  function gPoint(id) { return grammar && grammar.byId[id]; }
+  function gName(p) { return store.settings.viFirst ? p.vi : p.en; }
+  function gShort(p) { return store.settings.viFirst ? p.s[1] : p.s[0]; }
+
+  function gLink(id, text, note) {
+    var p = gPoint(id);
+    if (!p) return '<span class="g-tag' + (note ? " note" : "") + '">' + esc(text) + "</span>";
+    return '<a class="g-tag' + (note ? " note" : "") + '" href="#/grammar/' + esc(id) + '" data-g="' + esc(id) + '" title="' + esc(p.ko + " · " + gName(p)) + '">' + esc(text) + "</a>";
+  }
+
+  // How the card's word is built in the example: 보다 → 보 → + 았 → 봤 → + 어요 → 봤어요.
+  function bdHtml(c, m0) {
+    var bd = m0.bd;
+    if (!bd || !grammar) return "";
+    var rows = bd[1].map(function (st, k) {
+      var piece = st[0], res = st[1], gid = st[2];
+      var left = gid === "stem" ? piece : (k === 0 ? c.w + " + " + piece : "+ " + piece);
+      var p = gPoint(gid);
+      var tags = (p ? gLink(gid, gShort(p)) : "") +
+        st.slice(3).map(function (n) { return gLink(n[0], n[1], true); }).join("");
+      return '<li><span class="bd-step" lang="ko"><b>' + esc(left) + '</b><i aria-hidden="true">→</i>' + esc(res) + "</span>" +
+        (tags ? '<span class="bd-why">' + tags + "</span>" : "") + "</li>";
+    }).join("");
+    return '<details class="bd"' + (store.settings.bdOpen === false ? "" : " open") + ">" +
+      '<summary><span class="lbl">HOW IT\'S BUILT</span> <span class="bd-word" lang="ko">' + esc(bd[0]) + "</span></summary>" +
+      '<ol class="bd-steps">' + rows + "</ol></details>";
+  }
+
+  function gExamples(p) {
+    return '<div class="gp-ex">' + p.ex.map(function (e) {
+      var vi = '<p class="tr" lang="vi"><span class="flag">VI</span><span>' + markup(e[1]) + "</span></p>";
+      var en = '<p class="tr" lang="en"><span class="flag en">EN</span><span>' + markup(e[2]) + "</span></p>";
+      return '<div class="example"><div class="ex-body"><p class="ko" lang="ko">' + markup(e[0]) + "</p>" +
+        (store.settings.viFirst ? vi + en : en + vi) + "</div>" +
+        '<div class="ex-btns"><button class="speak sm" data-say="' + esc(plain(e[0])) + '" aria-label="Play example">' + icon.sound + "</button></div></div>";
+    }).join("") + "</div>";
+  }
+
+  function gBody(p) {
+    var first = store.settings.viFirst ? [p.dvi, "vi"] : [p.den, "en"];
+    var second = store.settings.viFirst ? [p.den, "en"] : [p.dvi, "vi"];
+    return '<p class="gp-form"><span class="lbl">HOW TO FORM</span><span lang="ko">' + esc(p.form) + "</span></p>" +
+      '<p class="gp-d" lang="' + first[1] + '">' + esc(first[0]) + "</p>" +
+      '<p class="gp-d second" lang="' + second[1] + '">' + esc(second[0]) + "</p>" + gExamples(p);
+  }
+
+  function gHead(p) {
+    var names = store.settings.viFirst ? [p.vi, p.en] : [p.en, p.vi];
+    return '<span class="gp-ko" lang="ko">' + esc(p.ko) + "</span>" +
+      '<span class="gp-names"><b>' + esc(names[0]) + "</b> · " + esc(names[1]) + "</span>";
+  }
+
+  // Quick look from a card, without leaving the study session.
+  function openGrammar(id) {
+    var p = gPoint(id);
+    if (!p) return;
+    openModal(
+      '<div class="g-modal"><h2><span class="chip lv' + p.lv + '">' + LEVELS[p.lv] + "</span>" +
+      '<button class="icon-btn" data-act="close" aria-label="Close">' + icon.x + "</button></h2>" +
+      '<div class="gp-title">' + gHead(p) + "</div>" + gBody(p) +
+      '<div class="row-btns"><a class="btn small mint" href="#/grammar/' + esc(id) + '">' + icon.book + "Open grammar page</a></div></div>"
+    );
+  }
+
+  function renderGrammar(id) {
+    var target = id && gPoint(id);
+    if (target) grammarLevel = target.lv;
+    document.title = "Grammar · Gorae Words";
+    var pts = grammar ? grammar.points.filter(function (p) { return p.lv === grammarLevel; }) : [];
+    var groups = CAT_ORDER.map(function (cat) {
+      var list = pts.filter(function (p) { return p.cat === cat; });
+      if (!list.length) return "";
+      var names = grammar.cats[cat] || [cat, cat];
+      return '<h3 class="g-cat">' + esc(store.settings.viFirst ? names[1] + " · " + names[0] : names[0] + " · " + names[1]) + "</h3>" +
+        list.map(function (p) {
+          return '<details class="g-point" id="g-' + esc(p.id) + '"' + (target === p ? " open" : "") + ">" +
+            "<summary>" + gHead(p) + '</summary><div class="gp-body">' + gBody(p) + "</div></details>";
+        }).join("");
+    }).join("");
+    var counts = [1, 2, 3].map(function (lv) { return grammar ? grammar.points.filter(function (p) { return p.lv === lv; }).length : 0; });
+    app.innerHTML =
+      '<header class="study-top"><a class="icon-btn" href="#/" aria-label="Back to all sets">' + icon.back + "</a>" +
+      '<div class="title"><b>Grammar · 문법</b><small>Ngữ pháp · ' + (grammar ? grammar.points.length : 0) + " points</small></div>" +
+      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></header>" +
+      '<p class="g-intro">The grammar used in the example sentences, from beginner to advanced. On a card, tap a step under <b>How it\'s built</b> to see its explanation.</p>' +
+      '<div class="list-head"><div class="seg" role="group" aria-label="Level">' +
+      [1, 2, 3].map(function (lv) {
+        return '<button data-glevel="' + lv + '" aria-pressed="' + (grammarLevel === lv) + '">' + LEVELS[lv] + " <small>" + counts[lv - 1] + "</small></button>";
+      }).join("") + "</div></div>" +
+      '<div class="g-list">' + (groups || '<p class="hint">Couldn\'t load the grammar list.</p>') + "</div>";
+    if (target) {
+      var el = document.getElementById("g-" + id);
+      if (el) {
+        el.classList.add("flash");
+        setTimeout(function () { el.scrollIntoView({ block: "start", behavior: "smooth" }); }, 50);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
   // ---------- Modals ----------
   function openModal(html) {
     closeModal();
@@ -889,6 +1010,7 @@
       '<a href="https://creativecommons.org/licenses/by-sa/2.0/kr/" target="_blank" rel="noopener">CC BY-SA 2.0 KR</a>. The word data on this site is shared under the same license. ' +
       "Homonyms are ordered using NIKL's 한국어 학습용 어휘 목록.</p>" +
       "<p><b>Example sentences</b> and their Vietnamese and English translations were written by AI (Claude) to keep them short and beginner-friendly. They may contain small mistakes.</p>" +
+      "<p><b>How it's built</b> breakdowns are made automatically with the <a href=\"https://github.com/bab2min/kiwipiepy\" target=\"_blank\" rel=\"noopener\">Kiwi</a> Korean analyzer; the grammar page was written by AI (Claude).</p>" +
       "<p><b>AI-written cards:</b> a few hundred common words (new loanwords and slang like 맛집, 알바, 헐) aren't in the dictionary. Their meanings were written by AI and are marked <span class=\"chip ai\">AI</span>.</p>" +
       "<p><b>Pronunciation guide:</b> generated from the dictionary's pronunciations. <button class=\"link-btn\" data-act=\"guide-help\">How to read it</button></p>" +
       "<p><b>Audio:</b> words play recordings by native speakers from the same dictionary, streamed from its server (dicmedia.korean.go.kr). Example sentences, and words without a recording, use your device's Korean voice.</p>"
@@ -1050,7 +1172,7 @@
 
   // ---------- Events ----------
   document.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-act],[data-say],[data-copy],[data-open],[data-mark],[data-go],[data-toggle],[data-filter],[data-setting]");
+    var t = e.target.closest("[data-act],[data-say],[data-copy],[data-open],[data-mark],[data-g],[data-glevel],[data-go],[data-toggle],[data-filter],[data-setting]");
     if (!t) {
       if (e.target.classList && e.target.classList.contains("modal-bg")) closeModal();
       return;
@@ -1063,6 +1185,15 @@
     if (t.dataset.copy) { copyText(t.dataset.copy); return; }
     if (t.dataset.open) { openCard(parseInt(t.dataset.open, 10)); return; }
     if (t.dataset.mark) { markWord(t); return; }
+    if (t.dataset.g) {
+      // Ctrl/Cmd-click opens the grammar page in a new tab; a plain click shows a popup.
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+      if (document.querySelector(".g-list")) go("#/grammar/" + t.dataset.g);
+      else openGrammar(t.dataset.g);
+      return;
+    }
+    if (t.dataset.glevel) { grammarLevel = Number(t.dataset.glevel); renderGrammar(); return; }
     if (t.dataset.go) { go(t.dataset.go); return; }
     if (t.dataset.toggle) { toggleStatus(t); return; }
     if (t.dataset.filter) {
@@ -1126,6 +1257,13 @@
     if (t.id === "importFile" && t.files && t.files[0]) importBackup(t.files[0]);
     if (t.id === "voiceSel") { changeSetting("voice", t.value); say("안녕하세요. 만나서 반가워요."); }
   });
+
+  // Remember whether the "How it's built" box is open.
+  document.addEventListener("toggle", function (e) {
+    if (e.target.classList && e.target.classList.contains("bd") && e.target.closest(".card.current")) {
+      if (store.settings.bdOpen !== e.target.open) { store.settings.bdOpen = e.target.open; save(); }
+    }
+  }, true);
 
   document.addEventListener("input", function (e) {
     if (e.target.id === "q") { searchQuery = e.target.value; runSearch(); }
