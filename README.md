@@ -61,7 +61,9 @@ python -m http.server 8000
 | Example sentences and their Vietnamese + English translations | Written by AI (Claude) to be short and beginner-friendly | — |
 | 381 words missing from the dictionary or its intended sense (new loanwords and slang like 맛집, 알바, 헐) | Written by AI (Claude), marked **AI** in the app | — |
 
-Proper nouns (cities, people, brands), tokenizer fragments, swear words and narrow jargon (game, makeup and fantasy-novel terms) were skipped. That's why the 7,000 cards cover frequency ranks 1–7,178.
+Proper nouns (cities, people, brands), tokenizer fragments, swear words and narrow jargon (game, makeup and fantasy-novel terms) were skipped.
+
+**Essential words first:** the 532 words in [`scripts/priority.txt`](scripts/priority.txt) (from explorekorean.net's "List of 500 Korean Words by Category": people, places, body, school, days, basic verbs, adjectives and adverbs) are all in the first 1,000 cards, mixed evenly with the most frequent other words (about 26 per set in sets 1–20). The other words follow in frequency order; the deck stays at 7,000 cards, so the rarest ones at the end drop off. When the order changes, the app moves your saved progress to each word's new set.
 
 Because the dictionary data is CC BY-SA, the word files in `data/` are shared under **CC BY-SA 2.0 KR** too.
 

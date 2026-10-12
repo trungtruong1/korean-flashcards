@@ -1,0 +1,61 @@
+스웨덴 | [스웨덴]은 겨울이 길어요. | Mùa đông ở [Thụy Điển] dài. | Winters in [Sweden] are long.
+달력 | [달력]에 생일을 표시했어요. | Tôi đánh dấu sinh nhật trên [lịch]. | I marked the birthday on the [calendar].
+정류장 | 버스 [정류장]에서 기다려요. | Tôi đợi ở [trạm] xe buýt. | I'm waiting at the bus [stop].
+비자 | 한국 [비자]를 받았어요. | Tôi đã nhận được [visa] Hàn Quốc. | I got a Korean [visa].
+사업가 | 그는 성공한 [사업가]예요. | Ông ấy là một [doanh nhân] thành đạt. | He's a successful [businessman].
+운동선수 | 제 꿈은 [운동선수]예요. | Ước mơ của tôi là làm [vận động viên]. | My dream is to be an [athlete].
+형제자매 | 저는 [형제자매]가 없어요. | Tôi không có [anh chị em]. | I don't have any [brothers or sisters].
+외동 | 저는 [외동]이에요. | Tôi là [con một]. | I'm an [only child].
+조부모 | 저는 [조부모]님과 같이 살아요. | Tôi sống cùng [ông bà]. | I live with my [grandparents].
+현지인 | [현지인]이 추천한 식당이에요. | Đây là quán ăn do [người địa phương] giới thiệu. | It's a restaurant the [locals] recommended.
+모국어 | 제 [모국어]는 베트남어예요. | [Tiếng mẹ đẻ] của tôi là tiếng Việt. | My [mother tongue] is Vietnamese.
+원어민 | 저는 [원어민] 친구들이 많아요. | Tôi có nhiều bạn [bản ngữ]. | I have a lot of [native-speaker] friends.
+외국어 | [외국어]를 배우는 건 재미있어요. | Học [ngoại ngữ] rất thú vị. | Learning a [foreign language] is fun.
+동남아시아 | [동남아시아]로 여행 가요. | Tôi đi du lịch [Đông Nam Á]. | I'm traveling to [Southeast Asia].
+노르웨이 | [노르웨이]에서 오로라를 봤어요. | Tôi đã ngắm cực quang ở [Na Uy]. | I saw the northern lights in [Norway].
+전세계 | 이 노래는 [전세계]에서 인기가 많아요. | Bài hát này nổi tiếng [khắp thế giới]. | This song is popular [all over the world].
+대학원 | 내년에 [대학원]에 가요. | Năm sau tôi học [cao học]. | I'm going to [grad school] next year.
+우체국 | [우체국]에서 소포를 보냈어요. | Tôi gửi bưu kiện ở [bưu điện]. | I sent a package at the [post office].
+슈퍼마켓 | [슈퍼마켓]에서 우유를 샀어요. | Tôi mua sữa ở [siêu thị]. | I bought milk at the [supermarket].
+커피숍 | [커피숍]에서 친구를 만나요. | Tôi gặp bạn ở [quán cà phê]. | I'm meeting a friend at a [coffee shop].
+기차역 | [기차역]까지 걸어갔어요. | Tôi đi bộ đến [ga tàu]. | I walked to the [train station].
+시외버스 | [시외버스]를 타고 부산에 가요. | Tôi đi [xe buýt liên tỉnh] đến Busan. | I'm taking an [intercity bus] to Busan.
+발꿈치 | 새 신발 때문에 [발꿈치]가 아파요. | [Gót chân] tôi đau vì đôi giày mới. | My [heels] hurt because of my new shoes.
+배꼽 | 아기 [배꼽]이 귀여워요. | [Rốn] của em bé dễ thương. | The baby's [belly button] is cute.
+필통 | [필통]에 연필이 있어요. | Trong [hộp bút] có bút chì. | There's a pencil in the [pencil case].
+연필꽂이 | 책상 위에 [연필꽂이]가 있어요. | Trên bàn có [ống cắm bút]. | There's a [pencil holder] on the desk.
+공책 | [공책]에 단어를 써요. | Tôi viết từ vựng vào [vở]. | I write words in my [notebook].
+중간고사 | 다음 주에 [중간고사]가 있어요. | Tuần sau có [thi giữa kỳ]. | I have [midterms] next week.
+기말고사 | [기말고사]가 끝났어요. | [Thi cuối kỳ] đã xong. | [Finals] are over.
+벼락치기 | 시험 전날 [벼락치기]를 했어요. | Tôi [học nhồi nhét] vào hôm trước kỳ thi. | I [crammed] the night before the exam.
+학점 | 이번 학기 [학점]이 좋아요. | [Điểm] học kỳ này của tôi tốt. | My [grades] this semester are good.
+재학생 | 저는 이 학교 [재학생]이에요. | Tôi là [sinh viên đang học] ở trường này. | I'm a [current student] at this school.
+졸업생 | 그는 이 대학교 [졸업생]이에요. | Anh ấy là [cựu sinh viên] của trường đại học này. | He's a [graduate] of this university.
+동창 | 고등학교 [동창]을 만났어요. | Tôi gặp lại [bạn cùng trường] cấp ba. | I met an old high school [classmate].
+어휘 | [어휘]를 많이 알아야 해요. | Phải biết nhiều [từ vựng]. | You need to know a lot of [vocabulary].
+공휴일 | 내일은 [공휴일]이에요. | Ngày mai là [ngày lễ]. | Tomorrow is a [public holiday].
+기념일 | 오늘은 우리 결혼 [기념일]이에요. | Hôm nay là [ngày kỷ niệm] cưới của chúng tôi. | Today is our wedding [anniversary].
+신혼여행 | [신혼여행]으로 제주도에 갔어요. | Chúng tôi đi [tuần trăng mật] ở đảo Jeju. | We went to Jeju for our [honeymoon].
+성함 | [성함]이 어떻게 되세요? | [Quý danh] của anh chị là gì ạ? | May I have your [name]?
+초인종 | 누가 [초인종]을 눌렀어요. | Ai đó bấm [chuông cửa]. | Someone rang the [doorbell].
+애완동물 | [애완동물]을 키워요? | Bạn có nuôi [thú cưng] không? | Do you have a [pet]?
+특기 | 제 [특기]는 요리예요. | [Sở trường] của tôi là nấu ăn. | My [special skill] is cooking.
+줄거리 | 영화 [줄거리]를 말해 주세요. | Hãy kể [cốt truyện] phim cho tôi nghe. | Tell me the [plot] of the movie.
+자서전 | 그 가수가 [자서전]을 썼어요. | Ca sĩ đó đã viết [tự truyện]. | That singer wrote an [autobiography].
+소설가 | 제 꿈은 [소설가]예요. | Ước mơ của tôi là làm [nhà văn]. | My dream is to be a [novelist].
+설거지하다 | 오늘은 제가 [설거지할게요]. | Hôm nay để tôi [rửa bát]. | I'll [do the dishes] today.
+털털하다 | 그녀는 성격이 [털털해요]. | Cô ấy tính tình [xuề xòa]. | She's [easygoing].
+공손하다 | 그 학생은 정말 [공손해요]. | Học sinh đó rất [lễ phép]. | That student is really [polite].
+부지런하다 | 우리 엄마는 [부지런해요]. | Mẹ tôi rất [siêng năng]. | My mom is [hardworking].
+게으르다 | 저는 주말에 [게을러요]. | Cuối tuần tôi [lười] lắm. | I'm [lazy] on weekends.
+외향적 | 제 여자친구는 [외향적]이에요. | Bạn gái tôi [hướng ngoại]. | My girlfriend is [extroverted].
+내성적 | 저는 좀 [내성적]이에요. | Tôi hơi [hướng nội]. | I'm a bit [introverted].
+열정적 | 그 선생님은 정말 [열정적]이에요. | Thầy giáo đó rất [nhiệt huyết]. | That teacher is really [passionate].
+한가하다 | 내일은 [한가할] 거예요. | Ngày mai tôi sẽ [rảnh]. | I'll be [free] tomorrow.
+날씬하다 | 그녀는 키가 크고 [날씬해요]. | Cô ấy cao và [thon thả]. | She's tall and [slim].
+불만족스럽다 | 호텔 방이 [불만족스러웠어요]. | Phòng khách sạn [không làm tôi hài lòng]. | The hotel room was [unsatisfactory].
+늦게 | 오늘 [늦게] 일어났어요. | Hôm nay tôi dậy [muộn]. | I woke up [late] today.
+이렇게 | [이렇게] 하면 돼요. | Làm [như thế này] là được. | Just do it [like this].
+그렇게 | 왜 [그렇게] 말했어요? | Sao bạn lại nói [như vậy]? | Why did you say it [like that]?
+저렇게 | 저도 [저렇게] 춤추고 싶어요. | Tôi cũng muốn nhảy [như thế kia]. | I want to dance [like that] too.
+아직도 | [아직도] 숙제를 해요? | Bạn [vẫn còn] làm bài tập à? | Are you [still] doing homework?

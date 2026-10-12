@@ -152,6 +152,7 @@
           last: raw.last || 1,
           updated: raw.updated || 0,
           syncUid: raw.syncUid || null,
+          dataVersion: raw.dataVersion || null,
         };
       }
     } catch (e) { /* fall through to a fresh store */ }
@@ -170,6 +171,39 @@
     if (progressChanged && window.goraeSync) window.goraeSync.push();
   }
   function setProgress(n) { return store.progress[n] || (store.progress[n] = {}); }
+
+  // Progress is stored per set. When the word list is rebuilt and words change
+  // sets (e.g. the essential words moved into sets 1–20), move each saved word
+  // to the set it's in now. Runs once per word-list version (meta.version), or
+  // with force=true for progress that arrives from another device.
+  function migrateProgress(force) {
+    if (!meta || !meta.version || (!force && store.dataVersion === meta.version)) return Promise.resolve(0);
+    var any = Object.keys(store.progress).some(function (n) { return Object.keys(store.progress[n] || {}).length > 0; });
+    if (!any) {
+      store.dataVersion = meta.version;
+      save();
+      return Promise.resolve(0);
+    }
+    return getSearchIndex().then(function (rows) {
+      var where = {};
+      rows.forEach(function (r) { where[r.w] = String(Math.ceil(r.pos / meta.setSize)); });
+      var next = {}, moved = 0;
+      Object.keys(store.progress).forEach(function (n) {
+        var p = store.progress[n] || {};
+        Object.keys(p).forEach(function (w) {
+          var to = where[w];
+          if (!to) return; // no longer in the word list
+          if (to !== String(n)) moved++;
+          var dest = next[to] || (next[to] = {});
+          if (dest[w] === undefined || p[w] === 1) dest[w] = p[w];
+        });
+      });
+      store.progress = next;
+      store.dataVersion = meta.version;
+      save(moved > 0);
+      return moved;
+    }).catch(function (e) { console.error(e); return 0; });
+  }
   function setCounts(n) {
     var p = store.progress[n] || {};
     var k = 0, l = 0;
@@ -290,7 +324,10 @@
     S = null;
     var parts = location.hash.replace(/^#\/?/, "").split("/");
     getMeta().then(function () {
+      return migrateProgress();
+    }).then(function (moved) {
       if (isStale(id)) return;
+      if (moved) toast("Word order updated: your progress moved with the words");
       var n = parseInt(parts[1], 10);
       if (parts[0] === "grammar") return renderGrammar(decodeURIComponent(parts[1] || ""));
       if (parts[0] === "set" && n >= 1 && n <= meta.sets) {
@@ -1000,7 +1037,7 @@
   function openAbout() {
     openModal(
       '<h2>About <button class="icon-btn" data-act="close" aria-label="Close">' + icon.x + "</button></h2>" +
-      "<p><b>Gorae Words (고래 단어장)</b> has " + fmt(meta ? meta.total : 7000) + " Korean words in sets of 50, ordered from most to least common.</p>" +
+      "<p><b>Gorae Words (고래 단어장)</b> has " + fmt(meta ? meta.total : 7000) + " Korean words in sets of 50, ordered from most to least common. About 500 essential everyday words (family, places, body, school, days, basic verbs and adjectives) are mixed into the first 1,000 so you learn them early.</p>" +
       "<h3>How to study</h3>" +
       "<p>Tap a card to flip it. Swipe <b>right</b> (or press →) if you know the word, <b>left</b> (←) if you don't yet. " +
       "Opening a set again shows only the words you haven't marked “got it”.</p>" +
@@ -1120,6 +1157,8 @@
       store.syncUid = uid;
       save();
       refreshView();
+      // Another device may still use an older word order.
+      migrateProgress(true).then(function (moved) { if (moved) refreshView(); });
     },
     setSyncUid: function (uid) { store.syncUid = uid; save(); },
     authChanged: function () {

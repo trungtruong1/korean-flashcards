@@ -7,9 +7,10 @@ Inputs (see README):
   --extras   scripts/extras.json   hand-written entries for words krdict lacks
   --out      data/          output directory
 """
-import argparse, collections, glob, json, os, re
+import argparse, collections, glob, hashlib, json, os, re
 
 TOTAL = 7000
+PRIORITY_BLOCK = 1000  # scripts/priority.txt words all land in the first this-many cards
 SET_SIZE = 50
 # krdict recordings live under this path on dicmedia.korean.go.kr; the app adds
 # the https host back.
@@ -241,6 +242,33 @@ def _choose_entries(cands, idx):
     return chosen
 
 
+def load_priority(path):
+    """Words (one per line, # comments) that must be in the first PRIORITY_BLOCK cards."""
+    out = []
+    for line in open(path, encoding="utf-8"):
+        line = line.strip()
+        if line and not line.startswith("#") and norm(line) not in out:
+            out.append(norm(line))
+    return out
+
+
+def prioritize(pool, pri, block, total):
+    """`pool` is in frequency order. The first `block` cards are every priority
+    word plus the most frequent other words, mixed evenly (each in its own
+    frequency order), so every set has its share of both. Everything else
+    follows in frequency order, cut at `total`."""
+    P = [c for c in pool if c["w"] in pri]
+    N = [c for c in pool if c["w"] not in pri]
+    if not P:
+        return pool[:total]
+    n_fill = block - len(P)
+    assert n_fill >= 0, "more priority words than PRIORITY_BLOCK"
+    targets = {int((k + 0.5) * block / len(P)): c for k, c in enumerate(P)}
+    it = iter(N[:n_fill])
+    first = [targets[i] if i in targets else next(it) for i in range(block)]
+    return (first + N[n_fill:])[:total]
+
+
 def load_examples(folder):
     out = {}
     for path in sorted(glob.glob(os.path.join(folder, "*.txt"))):
@@ -283,6 +311,8 @@ def main():
                     help="dir of .txt files with lines 'word | Korean | Vietnamese | English' (highlight in [brackets])")
     ap.add_argument("--breakdowns", default=os.path.join(os.path.dirname(__file__), "breakdowns.json"),
                     help="output of make_breakdowns.py (how each example uses its word)")
+    ap.add_argument("--priority", default=os.path.join(os.path.dirname(__file__), "priority.txt"),
+                    help="words to put in the first PRIORITY_BLOCK cards (one per line)")
     ap.add_argument("--report", default=None)
     a = ap.parse_args()
     simple_examples = load_examples(a.examples)
@@ -307,18 +337,10 @@ def main():
         if e["unit"] in ("단어", "") and not e["w"].startswith("-") and not e["w"].endswith("-"):
             by[norm(e["w"])].append(e)
 
-    cards, skipped, unknown, seen = [], [], [], set()
-    for w in words:
-        if len(cards) == TOTAL:
-            break
-        word = w["word"]
+    def make_card(word, rank):
+        """Card for a frequency-list token (or a priority word), or None if unknown."""
         key = norm(word)
-        if key in seen:
-            continue
-        if word in skip:
-            skipped.append(w)
-            continue
-        chosen =choose_entries(by.get(key, []), idx, prefer.get(key)) if word not in extras else []
+        chosen = choose_entries(by.get(key, []), idx, prefer.get(key)) if word not in extras else []
         if chosen:
             first = chosen[0][0]
             meanings, seen_en = [], set()
@@ -342,7 +364,7 @@ def main():
                 meanings[0]["vi"] = vi_override[key]
             if key in examples:
                 meanings[0]["x"] = examples[key]
-            card = {"r": w["rank"], "w": key, "m": meanings}
+            card = {"r": rank, "w": key, "m": meanings}
             pron = (first.get("pron") or "").split("/")[0].replace("ː", "").strip()
             if pron and pron != key:
                 card["pr"] = pron
@@ -350,11 +372,10 @@ def main():
                 card["lv"] = LEVEL[first["lvl"]]
         elif word in extras:
             p, en, vi, x = extras[word]
-            card = {"r": w["rank"], "w": key, "ai": 1, "m": [{"p": p, "en": en, "vi": vi, "x": x}]}
+            card = {"r": rank, "w": key, "ai": 1, "m": [{"p": p, "en": en, "vi": vi, "x": x}]}
             first = None
         else:
-            (skipped if word in skip else unknown).append(w)
-            continue
+            return None
         # Recording by a native speaker (krdict). AI cards borrow one from a
         # dictionary entry spelled the same way.
         sound = (first or {}).get("sound") or next((e["sound"] for e in by.get(key, []) if e.get("sound")), None)
@@ -362,8 +383,48 @@ def main():
             card["au"] = sound.split(SOUND_PREFIX, 1)[1]
         if key in WORD_GRAMMAR:
             card["g"] = WORD_GRAMMAR[key]
+        return card
+
+    # Priority words (scripts/priority.txt) all go in the first PRIORITY_BLOCK cards.
+    priority = load_priority(a.priority) if a.priority and os.path.exists(a.priority) else []
+    pri_set = set(priority)
+    for k in priority:  # a priority word is never skipped
+        skip.discard(k)
+    raw = {}
+    for w in words:
+        raw.setdefault(norm(w["word"]), w)
+
+    pool, skipped, unknown, seen = [], [], [], set()
+    for w in words:
+        if len(pool) >= TOTAL + len(pri_set):
+            break
+        word = w["word"]
+        key = norm(word)
+        if key in seen:
+            continue
+        if word in skip:
+            skipped.append(w)
+            continue
+        card = make_card(word, w["rank"])
+        if card is None:
+            unknown.append(w)
+            continue
         seen.add(key)
-        cards.append(card)
+        pool.append(card)
+    # Priority words the frequency list doesn't reach (rare, or not in it at all).
+    for key in priority:
+        if key in seen:
+            continue
+        w = raw.get(key)
+        card = make_card(w["word"] if w else key, w["rank"] if w else None)
+        if card is None:
+            print("WARNING: priority word not in krdict or extras:", key)
+            continue
+        seen.add(key)
+        pool.append(card)
+    cards = prioritize(pool, pri_set, PRIORITY_BLOCK, TOTAL)
+    moved_in = sum(1 for c in cards[:PRIORITY_BLOCK] if c["w"] in pri_set)
+    print(f"priority: {len(pri_set)} words, {moved_in} placed in the first {PRIORITY_BLOCK}")
 
     # Simple, translated example sentences replace the dictionary examples.
     missing_ex, bad_ex = [], []
@@ -401,7 +462,9 @@ def main():
     meta = {
         "total": len(cards), "setSize": SET_SIZE, "sets": nsets,
         "firstWords": [cards[i * SET_SIZE]["w"] for i in range(nsets)],
-        "maxRank": cards[-1]["r"] if cards else 0,
+        "maxRank": max((c["r"] for c in cards if c["r"]), default=0),
+        # Changes whenever cards move between sets; the app then moves saved progress.
+        "version": hashlib.sha1(" ".join(c["w"] for c in cards).encode("utf-8")).hexdigest()[:12],
         "audio": sum(1 for c in cards if c.get("au")),
     }
     with open(os.path.join(a.out, "meta.json"), "w", encoding="utf-8") as fh:
