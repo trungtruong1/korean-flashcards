@@ -91,6 +91,19 @@ python scripts/make_breakdowns.py scripts/examples scripts/breakdowns.json
 
 It writes `scripts/breakdowns.json`; the build only uses a breakdown while its example sentence is unchanged. Each step links to a grammar point in `data/grammar.json` (hand-written, with levels, explanations and examples).
 
+### Movie decks
+
+Movie decks teach the words a drama or movie uses most, episode by episode, in sets of 50. Only **word counts** are published: the cards use the dictionary meanings and our own example sentences, never lines from the show.
+
+1. Put the Korean subtitle files (`.srt`, `.vtt`, `.smi`, `.ass` or `.txt`) in `private/subtitles/<movie-id>/`, one per episode, with the episode number in the file name (`E01.srt`, `ep2.smi`…). `private/` is in `.gitignore`: subtitle files are never committed or published.
+2. Count the words (needs `pip install kiwipiepy`):
+
+   ```bash
+   python scripts/make_movie.py private/subtitles/movie-1 scripts/movies/movie-1.json --title "Movie 1"
+   ```
+
+3. Rebuild (`build_data.py`, as above). It writes `data/movies/`: each episode's words used at least twice, most used first, each word only in the first episode that uses it. Words already in the 7,000-word deck reuse their card; for the others it lists the words that still need an example in `scripts/examples/`.
+
 `scripts/examples/*.txt` hold the example sentences, one per line:
 
 ```

@@ -190,6 +190,7 @@
       var next = {}, moved = 0;
       Object.keys(store.progress).forEach(function (n) {
         var p = store.progress[n] || {};
+        if (!/^\d+$/.test(n)) { next[n] = p; return; } // movie sets keep their own keys
         Object.keys(p).forEach(function (w) {
           var to = where[w];
           if (!to) return; // no longer in the word list
@@ -233,12 +234,27 @@
       d.points.forEach(function (p) { d.byId[p.id] = p; });
       return d;
     }).catch(function (e) { console.error(e); return null; });
-    return Promise.all([meta ? meta : getJSON("data/meta.json"), g]).then(function (r) {
+    return Promise.all([meta ? meta : getJSON("data/meta.json"), g, getMovies()]).then(function (r) {
       meta = r[0];
       grammar = r[1];
+      movieList = r[2] || [];
       return meta;
     });
   }
+  // Movie decks: data/movies/index.json lists the movies, their episodes and
+  // the words in each set; data/movies/<id>-<ep>.json holds the cards.
+  var movies = null, movieList = [], movieCache = {};
+  function getMovies() {
+    if (!movies) movies = getJSON("data/movies/index.json").catch(function () { return []; });
+    return movies;
+  }
+  function getMovieEp(id, ep) {
+    var k = id + "-" + ep;
+    if (!movieCache[k]) movieCache[k] = getJSON("data/movies/" + encodeURIComponent(k) + ".json").catch(function (e) { delete movieCache[k]; throw e; });
+    return movieCache[k];
+  }
+  function movieKey(id, ep, s) { return "m:" + id + ":" + ep + ":" + s; }
+
   function getSet(n) {
     if (!setCache[n]) {
       setCache[n] = getJSON("data/sets/" + pad3(n) + ".json").catch(function (e) { delete setCache[n]; throw e; });
@@ -330,6 +346,11 @@
       if (moved) toast("Word order updated: your progress moved with the words");
       var n = parseInt(parts[1], 10);
       if (parts[0] === "grammar") return renderGrammar(decodeURIComponent(parts[1] || ""));
+      if (parts[0] === "movie" && parts[1]) {
+        var mid = decodeURIComponent(parts[1]), ep = parseInt(parts[2], 10), ms = parseInt(parts[3], 10);
+        if (ep >= 1 && ms >= 1) return startMovieStudy(mid, ep, ms, parts[4] || "auto", id);
+        return renderMovie(mid, id);
+      }
       if (parts[0] === "set" && n >= 1 && n <= meta.sets) {
         if (parts[2] === "list") return renderList(n, id);
         return startStudy(n, parts[2] || "auto", id);
@@ -391,7 +412,8 @@
       '<div class="stats"><span><i class="dot known"></i>' + fmt(known) + " got it</span>" +
       '<span><i class="dot learning"></i>' + fmt(learning) + " not yet</span>" +
       '<span><i class="dot new"></i>' + fmt(total - known - learning) + " new</span></div></div>" +
-      '<a class="btn mint" href="#/set/' + cont + '">' + (known + learning ? "Continue" : "Start") + " · Set " + cont + " " + icon.right + "</a></section>";
+      '<a class="btn mint" href="#/set/' + cont + '">' + (known + learning ? "Continue" : "Start") + " · Set " + cont + " " + icon.right + "</a></section>" +
+      moviesSection();
 
     for (var c = 0; c * perCh < meta.sets; c++) {
       var first = c * perCh + 1, last = Math.min(meta.sets, first + perCh - 1);
@@ -550,6 +572,11 @@
   }
 
   // ---------- Study ----------
+  // A study session works the same for a main set and a movie set; `src`
+  // describes where the cards come from and where progress is saved:
+  //   key: progress key (main: the set number; movie: "m:<id>:<ep>:<set>")
+  //   title/sub: header text, base: link for the set (+ "/learning", "/all"),
+  //   next: link to the next set, list: link to the word list (main sets only).
   function startStudy(n, mode, id) {
     app.innerHTML = '<div class="loading">' + whale() + "Loading Set " + n + "…</div>";
     return getSet(n).then(function (cards) {
@@ -557,19 +584,118 @@
       if (n < meta.sets) getSet(n + 1).catch(function () {});
       store.last = n;
       save();
-      var prog = setProgress(n);
-      var all = cards.map(function (c, i) { return { c: c, pos: (n - 1) * meta.setSize + i + 1 }; });
-      var deck = all;
-      if (mode === "learning") {
-        deck = all.filter(function (d) { return prog[d.c.w] === 0; });
-      } else if (mode === "auto") {
-        deck = all.filter(function (d) { return prog[d.c.w] !== 1; });
-      }
-      if (!deck.length) { deck = all; mode = "all"; }
-      if (store.settings.shuffle) deck = shuffle(deck.slice());
-      S = { n: n, mode: mode, deck: deck, i: 0, history: [], known: 0, learning: 0, busy: false };
-      renderStudy();
+      beginSession({
+        key: n, n: n, title: "Set " + n, sub: setRange(n), base: "#/set/" + n,
+        next: n < meta.sets ? "#/set/" + (n + 1) : null, nextLabel: "Next: Set " + (n + 1),
+        list: "#/set/" + n + "/list",
+      }, cards.map(function (c, i) { return { c: c, pos: (n - 1) * meta.setSize + i + 1 }; }), mode);
     });
+  }
+
+  function beginSession(src, all, mode) {
+    var deck = all;
+    if (mode === "learning") {
+      deck = all.filter(function (d) { return wordStatus(src.key, d.c) === 0; });
+    } else if (mode === "auto") {
+      deck = all.filter(function (d) { return wordStatus(src.key, d.c) !== 1; });
+    }
+    if (!deck.length) { deck = all; mode = "all"; }
+    if (store.settings.shuffle) deck = shuffle(deck.slice());
+    S = { src: src, n: src.n, all: all, mode: mode, deck: deck, i: 0, history: [], known: 0, learning: 0, busy: false };
+    renderStudy();
+  }
+
+  function startMovieStudy(mid, ep, s, mode, id) {
+    app.innerHTML = '<div class="loading">' + whale() + "Loading…</div>";
+    return getMovieEp(mid, ep).then(function (sets) {
+      if (isStale(id)) return;
+      var mv = findMovie(mid);
+      if (!mv || !sets[s - 1]) { location.hash = "#/movie/" + encodeURIComponent(mid); return; }
+      var eps = mv.episodes, at = 0;
+      for (var k = 0; k < eps.length; k++) if (eps[k].ep === ep) at = k;
+      var href = function (e, n) { return "#/movie/" + encodeURIComponent(mid) + "/" + e + "/" + n; };
+      var next = null, nextLabel = "";
+      if (s < sets.length) { next = href(ep, s + 1); nextLabel = "Next: Set " + (s + 1); }
+      else if (eps[at + 1]) { next = href(eps[at + 1].ep, 1); nextLabel = "Next: Episode " + eps[at + 1].ep; }
+      var start = 0;
+      for (var j = 0; j < s - 1; j++) start += sets[j].length;
+      beginSession({
+        key: movieKey(mid, ep, s), title: "Ep " + ep + " · Set " + s, sub: mv.title,
+        base: href(ep, s), next: next, nextLabel: nextLabel,
+        back: "#/movie/" + encodeURIComponent(mid), backLabel: "Back to " + mv.title,
+      }, sets[s - 1].map(function (c, i) { return { c: c, pos: start + i + 1 }; }), mode);
+    });
+  }
+
+  function findMovie(mid) { return movieList.filter(function (m) { return m.id === mid; })[0]; }
+
+  // Home page: one tile per movie deck.
+  function moviesSection() {
+    if (!movieList.length) return "";
+    return '<section class="movies"><h2 class="sec-title">Movies · Phim</h2><div class="movie-list">' +
+      movieList.map(function (mv) {
+        var t = movieTotals(mv);
+        return '<a class="movie-tile" href="#/movie/' + encodeURIComponent(mv.id) + '">' +
+          '<span class="mt-icon" aria-hidden="true">🎬</span>' +
+          '<span class="mt-main"><b>' + esc(mv.title) + "</b><small>" + mv.episodes.length + " episodes · " + fmt(t.known) + " / " + fmt(t.total) + " words</small>" +
+          '<span class="mini-bar"><i style="width:' + pct(t.known, t.total) + '%"></i></span></span>' + icon.right + "</a>";
+      }).join("") + "</div></section>";
+  }
+
+  // Known / not yet counts for a movie set from the index ([word, main position] pairs).
+  function movieSetCounts(key, words) {
+    var k = 0, l = 0;
+    words.forEach(function (x) {
+      var s = wordStatus(key, { w: x[0], dp: x[1] });
+      if (s === 1) k++; else if (s === 0) l++;
+    });
+    return { known: k, learning: l };
+  }
+
+  function movieTotals(mv) {
+    var t = { known: 0, learning: 0, total: 0 };
+    mv.episodes.forEach(function (e) {
+      e.sets.forEach(function (words, i) {
+        var c = movieSetCounts(movieKey(mv.id, e.ep, i + 1), words);
+        t.known += c.known; t.learning += c.learning; t.total += words.length;
+      });
+    });
+    return t;
+  }
+
+  function renderMovie(mid, id) {
+    var mv = findMovie(mid);
+    if (!mv) { location.hash = "#/"; return; }
+    document.title = mv.title + " · Gorae Words";
+    var tot = movieTotals(mv);
+    var html =
+      '<header class="study-top"><a class="icon-btn" href="#/" aria-label="Back to all sets">' + icon.back + "</a>" +
+      '<div class="title"><b>' + esc(mv.title) + "</b><small>" + mv.episodes.length + " episodes · " + fmt(tot.total) + " words</small></div>" +
+      '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></header>" +
+      '<p class="g-intro">The words each episode uses most, in sets of 50. A word appears in the first episode that uses it, so later episodes bring new words. Words you marked “got it” in the main sets count as known here too.</p>';
+    mv.episodes.forEach(function (e, ei) {
+      var epKnown = 0;
+      var tiles = e.sets.map(function (words, i) {
+        var c = movieSetCounts(movieKey(mid, e.ep, i + 1), words);
+        epKnown += c.known;
+        return '<a class="set-tile' + (c.known === words.length ? " done" : "") + '" href="#/movie/' + encodeURIComponent(mid) + "/" + e.ep + "/" + (i + 1) + '">' +
+          ring(c.known, c.learning, words.length) +
+          '<div><div class="s-name">Set ' + (i + 1) + '</div><div class="s-range">' + words.length + ' words</div><div class="s-first" lang="ko">' + esc(words[0][0]) + " …</div></div></a>";
+      }).join("");
+      html += '<details class="chapter"' + (ei < 1 || epKnown < e.words ? " open" : "") + ">" +
+        '<summary><span class="ch-title">Episode ' + e.ep + "</span>" +
+        '<span class="ch-meta"><span>' + fmt(epKnown) + " / " + fmt(e.words) + '</span><span class="mini-bar"><i style="width:' + pct(epKnown, e.words) + '%"></i></span><span class="caret">▶</span></span></summary>' +
+        '<div class="sets">' + tiles + "</div></details>";
+    });
+    app.innerHTML = html;
+  }
+
+  // A word's status in a set. Movie cards that are also in the main deck count
+  // as known when you've marked them "got it" there.
+  function wordStatus(key, c) {
+    var s = (store.progress[key] || {})[c.w];
+    if (s === undefined && c.dp && typeof key !== "number") s = (store.progress[Math.ceil(c.dp / meta.setSize)] || {})[c.w];
+    return s;
   }
 
   function modeLabel(mode) {
@@ -577,13 +703,14 @@
   }
 
   function renderStudy() {
-    document.title = "Set " + S.n + " · Gorae Words";
+    var src = S.src;
+    document.title = src.title + " · Gorae Words";
     app.innerHTML =
       '<section class="study"><header class="study-top">' +
-      '<div class="st-side"><a class="icon-btn" href="#/" aria-label="Back to all sets">' + icon.back + "</a></div>" +
-      '<div class="title"><b>Set ' + S.n + "</b><small>" + setRange(S.n) + " · " + modeLabel(S.mode) + "</small></div>" +
+      '<div class="st-side"><a class="icon-btn" href="' + (src.back || "#/") + '" aria-label="Back">' + icon.back + "</a></div>" +
+      '<div class="title"><b>' + esc(src.title) + "</b><small>" + esc(src.sub) + " · " + modeLabel(S.mode) + "</small></div>" +
       '<div class="st-side end"><button class="icon-btn" data-act="undo" aria-label="Undo last swipe">' + icon.undo + "</button>" +
-      '<a class="icon-btn" href="#/set/' + S.n + '/list" aria-label="Word list">' + icon.list + "</a>" +
+      (src.list ? '<a class="icon-btn" href="' + src.list + '" aria-label="Word list">' + icon.list + "</a>" : "") +
       '<button class="icon-btn" data-act="settings" aria-label="Settings">' + icon.gear + "</button></div></header>" +
       '<div id="stage">' +
       '<div class="round"><div class="bar"><i class="known" id="bk"></i><i class="learning" id="bl"></i></div>' +
@@ -648,7 +775,8 @@
     return '<div class="card ' + cls + '">' +
       '<div class="stamp know">GOT IT</div><div class="stamp learn">NOT YET</div>' +
       '<div class="inner">' +
-      '<div class="face front"><div class="meta-row"><span class="num">#' + fmt(d.pos) + '</span><span class="chips">' + lv + ai + "</span></div>" +
+      '<div class="face front"><div class="meta-row"><span class="num">#' + fmt(d.pos) + '</span><span class="chips">' +
+      (c.n ? '<span class="chip uses" title="Times this episode uses the word">×' + c.n + "</span>" : "") + lv + ai + "</span></div>" +
       front + '<div class="tap-hint">TAP TO FLIP</div></div>' +
       '<div class="face back">' + backHtml(c) + "</div>" +
       "</div></div>";
@@ -748,7 +876,7 @@
     S.busy = true;
     var el = currentCardEl();
     var d = S.deck[S.i];
-    var prog = setProgress(S.n);
+    var prog = setProgress(S.src.key);
     S.history.push({ w: d.c.w, prev: prog[d.c.w], dir: dir });
     prog[d.c.w] = dir > 0 ? 1 : 0;
     if (dir > 0) S.known++; else S.learning++;
@@ -771,7 +899,7 @@
   function undo() {
     if (!S || S.busy || !S.history.length) return;
     var h = S.history.pop();
-    var prog = setProgress(S.n);
+    var prog = setProgress(S.src.key);
     if (h.prev === undefined) delete prog[h.w]; else prog[h.w] = h.prev;
     if (h.dir > 0) S.known--; else S.learning--;
     save(true);
@@ -781,19 +909,23 @@
   }
 
   function renderDone() {
-    var c = setCounts(S.n), size = setLen(S.n);
+    var src = S.src, size = S.all.length, c = { known: 0, learning: 0 };
+    S.all.forEach(function (d) {
+      var s = wordStatus(src.key, d.c);
+      if (s === 1) c.known++; else if (s === 0) c.learning++;
+    });
     var all = c.known === size;
     var stage = document.getElementById("stage");
     stage.innerHTML =
       '<section class="done">' + whale(true) +
-      "<h2>" + (all ? "Set " + S.n + " complete!" : "Round finished!") + "</h2>" +
-      "<p>" + (all ? "You know all " + size + " words in this set. 잘했어요!" : c.known + " of " + size + " words in Set " + S.n + " marked “got it”.") + "</p>" +
+      "<h2>" + (all ? esc(src.title) + " complete!" : "Round finished!") + "</h2>" +
+      "<p>" + (all ? "You know all " + size + " words in this set. 잘했어요!" : c.known + " of " + size + " words in " + esc(src.title) + " marked “got it”.") + "</p>" +
       '<div class="tally"><div class="k"><b>' + S.known + '</b>got it</div><div class="l"><b>' + S.learning + "</b>not yet</div></div>" +
       '<div class="btns">' +
-      (c.learning ? '<button class="btn sky block" data-go="#/set/' + S.n + '/learning">Review ' + c.learning + " “not yet” word" + (c.learning > 1 ? "s" : "") + "</button>" : "") +
-      (S.n < meta.sets ? '<a class="btn mint block" href="#/set/' + (S.n + 1) + '">Next: Set ' + (S.n + 1) + " " + icon.right + "</a>" : "") +
-      '<button class="btn block" data-go="#/set/' + S.n + '/all">Study all ' + size + " again</button>" +
-      '<a class="btn ghost block" href="#/">Back to all sets</a></div></section>';
+      (c.learning ? '<button class="btn sky block" data-go="' + src.base + '/learning">Review ' + c.learning + " “not yet” word" + (c.learning > 1 ? "s" : "") + "</button>" : "") +
+      (src.next ? '<a class="btn mint block" href="' + src.next + '">' + esc(src.nextLabel) + " " + icon.right + "</a>" : "") +
+      '<button class="btn block" data-go="' + src.base + '/all">Study all ' + size + " again</button>" +
+      '<a class="btn ghost block" href="' + (src.back || "#/") + '">' + (src.backLabel || "Back to all sets") + "</a></div></section>";
     var u = app.querySelector('[data-act="undo"]');
     if (u) u.disabled = !S.history.length;
     if (all && S.known) confetti();

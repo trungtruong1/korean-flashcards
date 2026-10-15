@@ -4,6 +4,10 @@ sources/
 krdict.json
 nikl.json
 
+# Subtitle files used to count words for the Movie decks. Never commit or
+# publish these: only the word counts (scripts/movies/*.json) go public.
+private/
+
 __pycache__/
 .venv/
 node_modules/

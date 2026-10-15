@@ -552,3 +552,20 @@ a.g-tag:hover { border-color: var(--sky); }
 .g-modal .gp-ko { font-size: 24px; }
 .g-modal .gp-form, .g-modal .gp-d, .g-modal .gp-ex { margin-bottom: 10px; }
 .g-modal .row-btns { margin-top: 4px; }
+
+/* ---------- Movies ---------- */
+.sec-title { font-size: 13px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); margin: 0 6px 10px; }
+.movies { margin-bottom: 22px; }
+.movie-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.movie-tile {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 22px; text-decoration: none; color: var(--ink);
+  background: var(--surface); box-shadow: var(--shadow-sm); transition: transform .15s ease, box-shadow .15s ease;
+}
+.movie-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.movie-tile .mt-icon { font-size: 26px; line-height: 1; }
+.movie-tile .mt-main { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.movie-tile b { font-family: var(--font-cute); font-weight: 400; font-size: 20px; line-height: 1.1; }
+.movie-tile small { font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.movie-tile .mini-bar { width: 100%; }
+.movie-tile svg { width: 20px; height: 20px; color: var(--ink-3); flex: none; }
+.chip.uses { background: var(--sky-soft); color: var(--sky-strong); border-color: transparent; }

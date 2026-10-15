@@ -269,6 +269,74 @@ def prioritize(pool, pri, block, total):
     return (first + N[n_fill:])[:total]
 
 
+MOVIE_MIN_COUNT = 2  # a word must be used at least this often in an episode to get a card
+
+
+def build_movies(a, cards, make_card, simple_examples, breakdowns, skip):
+    """Movie decks: for each episode, the words it uses most (from make_movie.py's
+    counts), in sets of SET_SIZE. A word goes in the first episode that uses it
+    at least MOVIE_MIN_COUNT times, so later episodes bring new words. Cards reuse
+    the main deck's card when the word is in it; examples are always our own
+    sentences, never the show's dialogue.
+
+    Writes data/movies/index.json and data/movies/<id>-<ep>.json (a list of sets)."""
+    out_dir = os.path.join(a.out, "movies")
+    os.makedirs(out_dir, exist_ok=True)
+    for old in glob.glob(os.path.join(out_dir, "*.json")):
+        os.remove(old)
+    deck_pos = {c["w"]: i + 1 for i, c in enumerate(cards)}
+    deck_card = {c["w"]: c for c in cards}
+    skip_keys = {norm(w) for w in skip}
+    index, missing = [], []
+    paths = sorted(glob.glob(os.path.join(a.movies, "*.json"))) if a.movies and os.path.isdir(a.movies) else []
+    for path in paths:
+        mid = os.path.splitext(os.path.basename(path))[0]
+        movie = json.load(open(path, encoding="utf-8"))
+        used, episodes = set(), []
+        for ep in movie["episodes"]:
+            items = []
+            for word, n in ep["words"].items():
+                key = norm(word)
+                if n < MOVIE_MIN_COUNT or key in used or key in skip_keys:
+                    continue
+                if key in deck_card:
+                    card = dict(deck_card[key], dp=deck_pos[key])
+                else:
+                    card = make_card(key, None)
+                    if card is None:
+                        continue
+                    ex = simple_examples.get(key)
+                    m0 = card["m"][0]
+                    if ex and not check_example(key, ex):
+                        m0["x"], m0["xv"], m0["xe"] = ex
+                        bd = breakdowns.get(key)
+                        if bd and bd[0] == ex[0]:
+                            m0["bd"] = bd[1:]
+                    else:
+                        missing.append(key)
+                        m0.pop("x", None)  # no dictionary sentence either: ours or nothing
+                    for m in card["m"]:
+                        m.pop("_fb", None)
+                used.add(key)
+                card["n"] = n
+                items.append((n, deck_pos.get(key, 10 ** 6), card))
+            items.sort(key=lambda x: (-x[0], x[1]))
+            ep_cards = [c for _, _, c in items]
+            sets = [ep_cards[i:i + SET_SIZE] for i in range(0, len(ep_cards), SET_SIZE)]
+            with open(os.path.join(out_dir, f"{mid}-{ep['ep']}.json"), "w", encoding="utf-8") as fh:
+                json.dump(sets, fh, ensure_ascii=False, separators=(",", ":"))
+            # The words of each set (and their main-deck position), so the app can show
+            # progress without loading every episode.
+            episodes.append({"ep": ep["ep"], "words": len(ep_cards),
+                             "sets": [[[c["w"], c.get("dp", 0)] for c in s] for s in sets]})
+        index.append({"id": mid, "title": movie["title"], "episodes": episodes})
+        print(f"movie {mid}: {len(episodes)} episodes, {sum(e['words'] for e in episodes)} cards")
+    with open(os.path.join(out_dir, "index.json"), "w", encoding="utf-8") as fh:
+        json.dump(index, fh, ensure_ascii=False, separators=(",", ":"))
+    if missing:
+        print(f"WARNING: {len(missing)} movie words have no example (add them to scripts/examples), e.g. {missing[:15]}")
+
+
 def load_examples(folder):
     out = {}
     for path in sorted(glob.glob(os.path.join(folder, "*.txt"))):
@@ -311,6 +379,8 @@ def main():
                     help="dir of .txt files with lines 'word | Korean | Vietnamese | English' (highlight in [brackets])")
     ap.add_argument("--breakdowns", default=os.path.join(os.path.dirname(__file__), "breakdowns.json"),
                     help="output of make_breakdowns.py (how each example uses its word)")
+    ap.add_argument("--movies", default=os.path.join(os.path.dirname(__file__), "movies"),
+                    help="dir of word counts per episode from make_movie.py (one .json per movie)")
     ap.add_argument("--priority", default=os.path.join(os.path.dirname(__file__), "priority.txt"),
                     help="words to put in the first PRIORITY_BLOCK cards (one per line)")
     ap.add_argument("--report", default=None)
@@ -479,6 +549,8 @@ def main():
         search.append(row)
     with open(os.path.join(a.out, "search.json"), "w", encoding="utf-8") as fh:
         json.dump(search, fh, ensure_ascii=False, separators=(",", ":"))
+
+    build_movies(a, cards, make_card, simple_examples, breakdowns, skip)
 
     stats = collections.Counter()
     for c in cards:
