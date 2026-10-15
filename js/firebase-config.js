@@ -1,13 +1,11 @@
-// Accounts (sign in + cloud sync) are off until this is filled in with the
-// web app config from your Firebase project. See README → "Turn on accounts".
-// These values are not secrets; the Firestore rules in firestore.rules are
-// what keep each person's progress private.
-window.GORAE_FIREBASE = null;
-/* Example:
+// Firebase web app config for accounts (sign in + cloud sync). See README →
+// "Turn on accounts". These values are not secrets; the Firestore rules in
+// firestore.rules are what keep each person's progress private.
 window.GORAE_FIREBASE = {
-  apiKey: "AIza...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project",
-  appId: "1:1234567890:web:abc123",
+  apiKey: "AIzaSyBFAOkfNAc7LG-FJPKOT3hAKDJjBttoLoQ",
+  authDomain: "korean-flashcards-2924f.firebaseapp.com",
+  projectId: "korean-flashcards-2924f",
+  storageBucket: "korean-flashcards-2924f.firebasestorage.app",
+  messagingSenderId: "32337663538",
+  appId: "1:32337663538:web:55a4b0c3e0a0788068ce2b",
 };
-*/
